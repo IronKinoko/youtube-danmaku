@@ -1,0 +1,22 @@
+{
+  "name": "youtube-danmaku",
+  "version": "1.0.0",
+  "description": "youtube-danmaku",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --watch --mode=development",
+    "build": "webpack --mode=production"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.11.4",
+    "@types/webpack": "^4.41.21",
+    "babel-loader": "^8.1.0",
+    "comment-core-library": "^0.11.1",
+    "webpack": "^4.44.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.12"
+  }
+}
