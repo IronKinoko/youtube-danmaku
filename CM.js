@@ -99,7 +99,7 @@ function toggleDanmaku(use) {
  * @param {number} scale
  */
 function changeDanmakuSpeed(scale) {
-  CM.options.global.scale = 2.1 - scale
+  CM.options.global.scale = 3.1 - scale
 }
 
 /**
