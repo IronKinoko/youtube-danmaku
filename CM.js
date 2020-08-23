@@ -52,6 +52,7 @@ function inject(cb) {
 
     buildControls()
     subEvent()
+    toggleDanmaku(config.use)
     cb && cb()
   } catch (e) {
     console.error(e)
