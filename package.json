@@ -1,17 +1,21 @@
 {
-  "name": "youtube-danmaku",
+  "name": "ytb-danmaku",
   "version": "2.0.1",
-  "description": "youtube-danmaku",
+  "description": "ytb-danmaku",
   "main": "index.js",
   "scripts": {
     "dev": "parcel index.html",
-    "build": "rm -rf dist && parcel build index.html --no-source-maps"
+    "build": "rm -rf dist && parcel build index.js --no-source-maps -o ytb-danmaku-core.js",
+    "release": "node ./scripts/build.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "IronKinoko",
+  "homepage": "https://github.com/IronKinoko/ytb-danmaku",
+  "license": "MIT",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "exec-sh": "^0.3.4",
+    "inquirer": "^7.3.3",
     "parcel": "^1.12.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
