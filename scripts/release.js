@@ -22,17 +22,17 @@ async function release() {
 
   let template = fs.readFileSync(rPath('./ytb-danmaku.template'), 'utf-8')
   const ytbDanmakuCore = fs.readFileSync(
-    rPath('../dist/ytb-danmaku-core.js'),
-    'utf-8',
+    rPath('../dist/ytb-danmaku-core.min.js'),
+    'utf-8'
   )
 
   const oneLineCoreCode = ytbDanmakuCore.replace(/[\r\n]/g, '')
   template = template.replace(/##version##/gim, pkg.version)
 
   fs.writeFileSync(rPath('../package.json'), JSON.stringify(pkg, null, 2))
-  fs.writeFileSync(rPath('../dist/ytb-danmaku-core.js'), oneLineCoreCode)
+  fs.writeFileSync(rPath('../dist/ytb-danmaku-core.min.js'), oneLineCoreCode)
   fs.writeFileSync(rPath('../dist/ytb-danmaku.js'), template)
-
+  require('child_process').execSync('git rev-parse HEAD').toString().trim()
   await exec.promise('git add .')
   await exec.promise(`git commit -m "${pkg.version} release"`)
   await exec.promise('git push')
