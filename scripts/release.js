@@ -7,12 +7,24 @@ const inquirer = require('inquirer')
 const rPath = (filePath) => path.resolve(__dirname, filePath)
 
 async function release() {
+  const versionSplite = pkg.version.split('.').map((v) => +v)
+  const patchVersion = [
+    versionSplite[0],
+    versionSplite[1],
+    versionSplite[2] + 1,
+  ].join('.')
+  const minorVersion = [versionSplite[0], versionSplite[1] + 1, 0].join('.')
+  const majorVersion = [versionSplite[0] + 1, 0, 0].join('.')
   const options = await inquirer.prompt([
     {
-      type: 'input',
+      type: 'list',
       name: 'version',
       message: 'Version:',
-      default: pkg.version,
+      choices: [
+        { name: 'patch', checked: true, value: patchVersion },
+        { name: 'minor', value: minorVersion },
+        { name: 'major', value: majorVersion },
+      ],
     },
   ])
 
