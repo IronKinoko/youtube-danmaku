@@ -32,11 +32,20 @@ async function release() {
   fs.writeFileSync(rPath('../package.json'), JSON.stringify(pkg, null, 2))
   fs.writeFileSync(rPath('../dist/ytb-danmaku-core.min.js'), oneLineCoreCode)
   fs.writeFileSync(rPath('../dist/ytb-danmaku.js'), template)
-  require('child_process').execSync('git rev-parse HEAD').toString().trim()
+
+  await exec.promise('git add .')
+  await exec.promise(`git commit -m "${pkg.version} build core"`)
+
+  template = template.replace(
+    /##hash##/gim,
+    require('child_process').execSync('git rev-parse HEAD').toString().trim()
+  )
+  fs.writeFileSync(rPath('../dist/ytb-danmaku.js'), template)
+
   await exec.promise('git add .')
   await exec.promise(`git commit -m "${pkg.version} release"`)
-  await exec.promise('git push')
   await exec.promise(`git tag v${pkg.version}`)
+  await exec.promise('git push')
   await exec.promise('git push origin --tags')
 
   console.log(`build success, version: ${pkg.name}@${pkg.version}`)
