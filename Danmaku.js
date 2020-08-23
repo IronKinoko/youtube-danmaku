@@ -53,7 +53,7 @@ const Danmaku = () => {
   const [open, setOpen] = useState(false)
   const classes = useStyles()
   const [config, setConfig] = useLocalStorageState('ytb-danmaku-config', {
-    scale: 1.5,
+    scale: 0.5,
     opacity: 0.7,
     use: false,
   })
