@@ -1,6 +1,6 @@
 {
   "name": "ytb-danmaku",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "ytb-danmaku",
   "main": "index.js",
   "scripts": {
