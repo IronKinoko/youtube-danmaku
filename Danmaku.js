@@ -55,7 +55,7 @@ const Danmaku = () => {
   const [config, setConfig] = useLocalStorageState('ytb-danmaku-config', {
     scale: 0.5,
     opacity: 0.7,
-    use: false,
+    use: true,
   })
 
   useEffect(() => {
