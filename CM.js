@@ -20,6 +20,7 @@ function init(cb) {
         }
       } else {
         inited = false
+        prevVID = null
         clearInterval(timeKey)
       }
     })
@@ -28,6 +29,15 @@ function init(cb) {
 }
 function inject(cb) {
   try {
+    console.log('ytb-danmaku-inited')
+    const config = JSON.parse(
+      localStorage.getItem('ytb-danmaku-config') || {
+        use: true,
+        scale: 0.5,
+        opacity: 0.7,
+      }
+    )
+
     clearInterval(timeKey)
     document.getElementById('player-container').classList.add('abp')
     document.getElementById('ytd-player').classList.add('container')
@@ -35,6 +45,8 @@ function inject(cb) {
       .querySelector('div.ytp-left-controls')
       .setAttribute('style', 'overflow: unset;')
     CM = new CommentManager(document.querySelector('#ytd-player'))
+    changeDanmakuSpeed(config.scale)
+    changeDanmakuOpacity(config.opacity)
     CM.init() // 初始化
 
     buildControls()
@@ -78,6 +90,7 @@ function getDanmaku() {
 }
 
 function buildControls() {
+  if (document.getElementById('ytb-danmaku-config')) return
   const div = document.createElement('div')
   div.style.width = 'auto'
   div.id = 'ytb-danmaku-config'
@@ -138,8 +151,8 @@ function changeDanmakuSpeed(scale) {
 /**
  * @param {number} opacity
  */
-function changeOpacity(opacity) {
+function changeDanmakuOpacity(opacity) {
   CM.options.global.opacity = opacity
 }
 
-export { init, toggleDanmaku, changeDanmakuSpeed, changeOpacity }
+export { init, toggleDanmaku, changeDanmakuSpeed, changeDanmakuOpacity }

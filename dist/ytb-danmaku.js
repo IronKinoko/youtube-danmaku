@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         youtube-danmaku
 // @namespace    https://github.com/IronKinoko/ytb-danmaku
-// @version      2.0.5
+// @version      2.0.6
 // @license      MIT
 // @description  Youtube livechat danmaku
 // @author       Ironkinoko
 // @match        https://www.youtube.com*
 // @grant        none
 // @require      https://cdn.jsdelivr.net/npm/comment-core-library@0.11.1/dist/CommentCoreLibrary.min.js
-// @require      https://cdn.jsdelivr.net/gh/IronKinoko/ytb-danmaku@5d2657bc0d6e6c3f7e983b73d67ab0d6cc62e0a3/dist/ytb-danmaku-core.min.js
+// @require      https://cdn.jsdelivr.net/gh/IronKinoko/ytb-danmaku@##hash##/dist/ytb-danmaku-core.min.js
 // ==/UserScript==
 
 ;(function () {
