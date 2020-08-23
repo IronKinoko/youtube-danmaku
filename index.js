@@ -4,6 +4,7 @@ import Danmaku from './Danmaku'
 import { init } from './CM'
 
 window.addEventListener('load', (e) => {
-  init()
-  ReactDOM.render(<Danmaku />, document.getElementById('ytb-danmaku-config'))
+  init(() =>
+    ReactDOM.render(<Danmaku />, document.getElementById('ytb-danmaku-config'))
+  )
 })

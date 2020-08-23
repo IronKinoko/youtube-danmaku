@@ -2,8 +2,33 @@ let playing = true
 let timeKey
 let prevID
 let CM
-function init() {
+function init(cb) {
+  let prevVID
+  let inited = false
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (location.pathname === '/watch') {
+        const VID = getQueryString('v')
+        if (prevVID !== VID) {
+          prevVID = VID
+          inject(cb)
+        } else {
+          if (!inited) {
+            inited = true
+            inject(cb)
+          }
+        }
+      } else {
+        inited = false
+        clearInterval(timeKey)
+      }
+    })
+  })
+  observer.observe(document.body, { childList: true, subtree: true })
+}
+function inject(cb) {
   try {
+    clearInterval(timeKey)
     document.getElementById('player-container').classList.add('abp')
     document.getElementById('ytd-player').classList.add('container')
     document
@@ -14,12 +39,20 @@ function init() {
 
     buildControls()
     subEvent()
+    cb && cb()
   } catch (e) {
     console.error(e)
     setTimeout(() => {
       init()
     }, 3000)
   }
+}
+
+function getQueryString(name) {
+  var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
+  var r = location.search.substr(1).match(reg)
+  if (r != null) return unescape(decodeURI(r[2]))
+  return null
 }
 
 function getDanmaku() {
