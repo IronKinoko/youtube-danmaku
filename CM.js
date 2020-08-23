@@ -31,11 +31,12 @@ function inject(cb) {
   try {
     console.log('ytb-danmaku-inited')
     const config = JSON.parse(
-      localStorage.getItem('ytb-danmaku-config') || {
-        use: true,
-        scale: 0.5,
-        opacity: 0.7,
-      }
+      localStorage.getItem('ytb-danmaku-config') ||
+        JSON.stringify({
+          use: true,
+          scale: 0.5,
+          opacity: 0.7,
+        })
     )
 
     clearInterval(timeKey)
