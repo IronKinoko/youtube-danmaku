@@ -11,7 +11,22 @@ import Fade from '@material-ui/core/Fade'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Slider from '@material-ui/core/Slider'
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
+import ThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import { changeDanmakuSpeed, changeDanmakuOpacity, toggleDanmaku } from './CM'
+
+const muiTheme = createMuiTheme({
+  palette: {
+    secondary: { main: '#f00' },
+  },
+  overrides: {
+    MuiSwitch: {
+      thumb: { backgroundColor: 'white' },
+      track: { opacity: '1 !important' },
+    },
+  },
+})
+
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
@@ -47,6 +62,7 @@ const useStyles = makeStyles((theme) =>
         backgroundColor: 'rgba(255,255,255,.1)',
       },
     },
+    switch: {},
   })
 )
 const Danmaku = () => {
@@ -88,72 +104,74 @@ const Danmaku = () => {
       </Tooltip>
 
       <Fade in={open} unmountOnExit>
-        <Box className={classes.controls}>
-          <ClickAwayListener onClickAway={() => setOpen(false)}>
-            <List>
-              <ListItem
-                button
-                className={classes.listButton}
-                onClick={handleSwitch}
-              >
-                <ListItemText
-                  primary="弹幕开关"
-                  primaryTypographyProps={{
-                    className: 'ytp-menuitem-label',
-                    style: { fontWeight: 500 },
-                  }}
-                />
-                <ListItemSecondaryAction>
-                  <Switch checked={config.use} onClick={handleSwitch} />
-                </ListItemSecondaryAction>
-              </ListItem>
-              <ListItem className={classes.listButton}>
-                <ListItemText
-                  primary={
-                    <div className={classes.sliderRoot}>
-                      <div className="ytp-menuitem-label">弹幕速度</div>
-                      <Slider
-                        color="secondary"
-                        max={2}
-                        step={0.1}
-                        min={0.1}
-                        value={config.scale}
-                        valueLabelDisplay="auto"
-                        className={classes.slider}
-                        onChange={(e, v) => {
-                          setConfig((t) => ({ ...t, scale: v }))
-                          changeDanmakuSpeed(v)
-                        }}
-                      />
-                    </div>
-                  }
-                />
-              </ListItem>
-              <ListItem className={classes.listButton}>
-                <ListItemText
-                  primary={
-                    <div className={classes.sliderRoot}>
-                      <div className="ytp-menuitem-label">不透明度</div>
-                      <Slider
-                        color="secondary"
-                        max={1}
-                        step={0.1}
-                        min={0}
-                        value={config.opacity}
-                        valueLabelDisplay="auto"
-                        className={classes.slider}
-                        onChange={(e, v) => {
-                          setConfig((t) => ({ ...t, opacity: v }))
-                          changeDanmakuOpacity(v)
-                        }}
-                      />
-                    </div>
-                  }
-                />
-              </ListItem>
-            </List>
-          </ClickAwayListener>
-        </Box>
+        <ThemeProvider theme={muiTheme}>
+          <Box className={classes.controls}>
+            <ClickAwayListener onClickAway={() => setOpen(false)}>
+              <List>
+                <ListItem
+                  button
+                  className={classes.listButton}
+                  onClick={handleSwitch}
+                >
+                  <ListItemText
+                    primary="弹幕开关"
+                    primaryTypographyProps={{
+                      className: 'ytp-menuitem-label',
+                      style: { fontWeight: 500 },
+                    }}
+                  />
+                  <ListItemSecondaryAction>
+                    <Switch checked={config.use} onClick={handleSwitch} />
+                  </ListItemSecondaryAction>
+                </ListItem>
+                <ListItem className={classes.listButton}>
+                  <ListItemText
+                    primary={
+                      <div className={classes.sliderRoot}>
+                        <div className="ytp-menuitem-label">弹幕速度</div>
+                        <Slider
+                          color="secondary"
+                          max={2}
+                          step={0.1}
+                          min={0.1}
+                          value={config.scale}
+                          valueLabelDisplay="auto"
+                          className={classes.slider}
+                          onChange={(e, v) => {
+                            setConfig((t) => ({ ...t, scale: v }))
+                            changeDanmakuSpeed(v)
+                          }}
+                        />
+                      </div>
+                    }
+                  />
+                </ListItem>
+                <ListItem className={classes.listButton}>
+                  <ListItemText
+                    primary={
+                      <div className={classes.sliderRoot}>
+                        <div className="ytp-menuitem-label">不透明度</div>
+                        <Slider
+                          color="secondary"
+                          max={1}
+                          step={0.1}
+                          min={0}
+                          value={config.opacity}
+                          valueLabelDisplay="auto"
+                          className={classes.slider}
+                          onChange={(e, v) => {
+                            setConfig((t) => ({ ...t, opacity: v }))
+                            changeDanmakuOpacity(v)
+                          }}
+                        />
+                      </div>
+                    }
+                  />
+                </ListItem>
+              </List>
+            </ClickAwayListener>
+          </Box>
+        </ThemeProvider>
       </Fade>
     </span>
   )

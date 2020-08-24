@@ -48,8 +48,7 @@ function inject(cb) {
     )
 
     clearInterval(timeKey)
-    document.getElementById('player-container').classList.add('abp')
-    document.getElementById('ytd-player').classList.add('container')
+    document.getElementById('ytd-player').classList.add('danmaku-container')
     document
       .querySelector('div.ytp-left-controls')
       .setAttribute('style', 'overflow: unset;')
