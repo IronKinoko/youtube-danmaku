@@ -6,30 +6,34 @@ let CM
  * @type {MutationObserver}
  */
 let videoObserver
+/**
+ * @type {MutationObserver}
+ */
+let bodyObserver
+
 function init(cb) {
   let prevVID
   let inited = false
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (location.pathname === '/watch') {
-        const VID = getQueryString('v')
-        if (prevVID !== VID) {
-          prevVID = VID
-          inject(cb)
-        } else {
-          if (!inited) {
-            inited = true
-            inject(cb)
-          }
-        }
+  if (bodyObserver) bodyObserver.disconnect()
+  bodyObserver = new MutationObserver(() => {
+    if (location.pathname === '/watch') {
+      const VID = getQueryString('v')
+      if (prevVID !== VID) {
+        prevVID = VID
+        inject(cb)
       } else {
-        inited = false
-        prevVID = null
-        clearInterval(timeKey)
+        if (!inited) {
+          inited = true
+          inject(cb)
+        }
       }
-    })
+    } else {
+      inited = false
+      prevVID = null
+      clearInterval(timeKey)
+    }
   })
-  observer.observe(document.body, { childList: true, subtree: true })
+  bodyObserver.observe(document.body, { childList: true, subtree: true })
 }
 function inject(cb) {
   try {
@@ -61,7 +65,7 @@ function inject(cb) {
   } catch (e) {
     console.error(e)
     setTimeout(() => {
-      init()
+      inject()
     }, 3000)
   }
 }
@@ -129,7 +133,7 @@ function subEvent() {
       CM.init(document.querySelector('#ytd-player'))
     }, 500)
   })
-  videoObserver.observe(video)
+  videoObserver.observe(video, { attributes: true })
 }
 
 /**
