@@ -2,6 +2,10 @@ let playing = true
 let timeKey
 let prevID
 let CM
+/**
+ * @type {MutationObserver}
+ */
+let videoObserver
 function init(cb) {
   let prevVID
   let inited = false
@@ -119,9 +123,13 @@ function subEvent() {
     CM.init(document.querySelector('#ytd-player'))
   })
 
-  video.addEventListener('fullscreenchange', () => {
-    CM.init(document.querySelector('#ytd-player'))
+  if (videoObserver) videoObserver.disconnect()
+  videoObserver = new MutationObserver(() => {
+    setTimeout(() => {
+      CM.init(document.querySelector('#ytd-player'))
+    }, 500)
   })
+  videoObserver.observe(video)
 }
 
 /**
