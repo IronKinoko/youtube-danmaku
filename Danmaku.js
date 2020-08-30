@@ -88,23 +88,23 @@ const Danmaku = () => {
   }
 
   return (
-    <span className={classes.root}>
-      <Tooltip
-        title="弹幕"
-        placement="top"
-        classes={{ tooltip: classes.tooltip }}
-      >
-        <button
-          style={{ textAlign: 'center' }}
-          onClick={() => setOpen(true)}
-          className="ytp-button"
+    <ThemeProvider theme={muiTheme}>
+      <span className={classes.root}>
+        <Tooltip
+          title="弹幕"
+          placement="top"
+          classes={{ tooltip: classes.tooltip }}
         >
-          弹幕
-        </button>
-      </Tooltip>
+          <button
+            style={{ textAlign: 'center' }}
+            onClick={() => setOpen(true)}
+            className="ytp-button"
+          >
+            弹幕
+          </button>
+        </Tooltip>
 
-      <Fade in={open} unmountOnExit>
-        <ThemeProvider theme={muiTheme}>
+        <Fade in={open} unmountOnExit>
           <Box className={classes.controls}>
             <ClickAwayListener onClickAway={() => setOpen(false)}>
               <List>
@@ -171,9 +171,9 @@ const Danmaku = () => {
               </List>
             </ClickAwayListener>
           </Box>
-        </ThemeProvider>
-      </Fade>
-    </span>
+        </Fade>
+      </span>
+    </ThemeProvider>
   )
 }
 
