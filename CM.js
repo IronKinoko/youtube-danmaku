@@ -12,6 +12,18 @@ let videoObserver
 let bodyObserver
 
 function init(cb) {
+  if (process.env.NODE_ENV === 'development') {
+    let button = document.createElement('button')
+    button.innerText = '发送弹幕'
+    button.onclick = () =>
+      CM.send({
+        text: '<div style="color:red;">123</div>',
+        mode: 1,
+        useHTML: true,
+      })
+    document.body.append(button)
+    return inject(cb)
+  }
   let prevVID
   let inited = false
   if (bodyObserver) bodyObserver.disconnect()

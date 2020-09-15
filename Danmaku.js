@@ -8,11 +8,13 @@ import Switch from '@material-ui/core/Switch'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Box from '@material-ui/core/Box'
 import Fade from '@material-ui/core/Fade'
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import createStyles from '@material-ui/core/styles/createStyles'
 import Slider from '@material-ui/core/Slider'
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
-import ThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
+import {
+  ThemeProvider as MuiThemeProvider,
+  makeStyles,
+  createStyles,
+  createMuiTheme,
+} from '@material-ui/core/styles'
 import { changeDanmakuSpeed, changeDanmakuOpacity, toggleDanmaku } from './CM'
 
 const muiTheme = createMuiTheme({
@@ -88,7 +90,7 @@ const Danmaku = () => {
   }
 
   return (
-    <ThemeProvider theme={muiTheme}>
+    <MuiThemeProvider theme={muiTheme}>
       <span className={classes.root}>
         <Tooltip
           title="弹幕"
@@ -173,7 +175,7 @@ const Danmaku = () => {
           </Box>
         </Fade>
       </span>
-    </ThemeProvider>
+    </MuiThemeProvider>
   )
 }
 
