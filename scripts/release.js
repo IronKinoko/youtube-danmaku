@@ -1,7 +1,7 @@
 const pkg = require('../package.json')
 const fs = require('fs')
 const path = require('path')
-const exec = require('exec-sh')
+const cp = require('child_process')
 const inquirer = require('inquirer')
 
 const rPath = (filePath) => path.resolve(__dirname, filePath)
@@ -30,7 +30,7 @@ async function release() {
 
   pkg.version = options.version
 
-  await exec.promise('npm run build')
+  cp.execSync('npm run build')
 
   let template = fs.readFileSync(rPath('./ytb-danmaku.template'), 'utf-8')
   const ytbDanmakuCore = fs.readFileSync(
@@ -45,20 +45,20 @@ async function release() {
   fs.writeFileSync(rPath('../dist/ytb-danmaku-core.min.js'), oneLineCoreCode)
   fs.writeFileSync(rPath('../dist/ytb-danmaku.user.js'), template)
 
-  await exec.promise('git add .')
-  await exec.promise(`git commit -m "${pkg.version} build core"`)
+  cp.execSync('git add .')
+  cp.execSync(`git commit -m "${pkg.version} build core"`)
 
   template = template.replace(
     /##hash##/gim,
-    require('child_process').execSync('git rev-parse HEAD').toString().trim()
+    cp.execSync('git rev-parse HEAD').toString().trim()
   )
   fs.writeFileSync(rPath('../dist/ytb-danmaku.user.js'), template)
 
-  await exec.promise('git add .')
-  await exec.promise(`git commit -m "${pkg.version} release"`)
-  await exec.promise(`git tag v${pkg.version}`)
-  await exec.promise('git push')
-  await exec.promise('git push origin --tags')
+  cp.execSync('git add .')
+  cp.execSync(`git commit -m "${pkg.version} release"`)
+  cp.execSync(`git tag v${pkg.version}`)
+  cp.execSync('git push')
+  cp.execSync('git push origin --tags')
 
   console.log(`build success, version: ${pkg.name}@${pkg.version}`)
 }
