@@ -1,3 +1,5 @@
+import { autorun, observable, action } from 'mobx'
+
 let playing = true
 let timeKey
 let prevID
@@ -11,18 +13,81 @@ let videoObserver
  */
 let bodyObserver
 
+class DanmakuOptions {
+  @observable use = true
+  @observable opacity = 0.7
+  @observable showStickers = true
+  @observable scale = 0.5
+
+  constructor() {
+    const config = JSON.parse(
+      localStorage.getItem('ytb-danmaku-config') ||
+        JSON.stringify({
+          use: true,
+          showStickers: true,
+          scale: 0.5,
+          opacity: 0.7,
+        })
+    )
+    this.use = config.use
+    this.opacity = config.opacity
+    this.showStickers = config.showStickers
+    this.scale = config.scale
+  }
+
+  /**
+   * @param {boolean} use
+   */
+  @action toggleDanmaku(use) {
+    config.use = use
+    if (use) {
+      playing = true
+      CM.clear()
+      CM.start()
+      timeKey = setInterval(() => {
+        getDanmaku()
+      }, 100)
+    } else {
+      playing = false
+      CM.stop()
+      CM.clear()
+      clearInterval(timeKey)
+    }
+  }
+
+  /**
+   * @param {number} scale
+   */
+  @action changeDanmakuSpeed(scale) {
+    this.scale = scale
+    CM.options.global.scale = 3.1 - scale
+  }
+
+  /**
+   * @param {number} opacity
+   */
+  @action changeDanmakuOpacity(opacity) {
+    this.opacity = opacity
+    CM.options.global.opacity = opacity
+  }
+
+  /**
+   * @param {boolean} showStickers
+   */
+  @action toggleShowSticker(showStickers) {
+    this.showStickers = showStickers
+  }
+}
+
+const config = new DanmakuOptions()
+
+autorun(() => {
+  localStorage.setItem('ytb-danmaku-config', JSON.stringify(config))
+})
+
 function init(cb) {
   if (process.env.NODE_ENV === 'development') {
-    let button = document.createElement('button')
-    button.innerText = '发送弹幕'
-    button.onclick = () =>
-      CM.send({
-        text: '<div style="color:red;">123</div>',
-        mode: 1,
-        useHTML: true,
-      })
-    document.body.append(button)
-    return inject(cb)
+    return devModeInit(cb)
   }
   let prevVID
   let inited = false
@@ -47,17 +112,23 @@ function init(cb) {
   })
   bodyObserver.observe(document.body, { childList: true, subtree: true })
 }
+
+function devModeInit(cb) {
+  let button = document.createElement('button')
+  button.innerText = '发送弹幕'
+  button.onclick = () =>
+    CM.send({
+      text: '<div style="color:red;">123</div>',
+      mode: 1,
+      useHTML: config.showStickers,
+    })
+  document.body.append(button)
+  return inject(cb)
+}
+
 function inject(cb) {
   try {
     console.log('ytb-danmaku-inited')
-    const config = JSON.parse(
-      localStorage.getItem('ytb-danmaku-config') ||
-        JSON.stringify({
-          use: true,
-          scale: 0.5,
-          opacity: 0.7,
-        })
-    )
 
     clearInterval(timeKey)
     document.getElementById('ytd-player').classList.add('danmaku-container')
@@ -65,13 +136,13 @@ function inject(cb) {
       .querySelector('div.ytp-left-controls')
       .setAttribute('style', 'overflow: unset;')
     CM = new CommentManager(document.querySelector('#ytd-player'))
-    changeDanmakuSpeed(config.scale)
-    changeDanmakuOpacity(config.opacity)
+    config.changeDanmakuSpeed(config.scale)
+    config.changeDanmakuOpacity(config.opacity)
     CM.init() // 初始化
 
     buildControls()
     subEvent()
-    toggleDanmaku(config.use)
+    config.toggleDanmaku(config.use)
     cb && cb()
   } catch (e) {
     console.error(e)
@@ -101,10 +172,17 @@ function getDanmaku() {
     const lastMessageNode = messagesNode.pop()
     if (lastMessageNode) {
       const nextID = lastMessageNode.id
-      const message = lastMessageNode.querySelector('#message').textContent
+      const message = config.showStickers
+        ? lastMessageNode.querySelector('#message').innerHTML
+        : lastMessageNode.querySelector('#message').innerText
       playing &&
         prevID !== nextID &&
-        CM.send({ text: message, mode: 1, color: 0xffffff })
+        CM.send({
+          text: message,
+          mode: 1,
+          color: 0xffffff,
+          useHTML: config.showStickers,
+        })
       prevID = nextID
     }
   }
@@ -146,38 +224,4 @@ function subEvent() {
   })
   videoObserver.observe(video, { attributes: true })
 }
-
-/**
- * @param {boolean} use
- */
-function toggleDanmaku(use) {
-  if (use) {
-    playing = true
-    CM.clear()
-    CM.start()
-    timeKey = setInterval(() => {
-      getDanmaku()
-    }, 100)
-  } else {
-    playing = false
-    CM.stop()
-    CM.clear()
-    clearInterval(timeKey)
-  }
-}
-
-/**
- * @param {number} scale
- */
-function changeDanmakuSpeed(scale) {
-  CM.options.global.scale = 3.1 - scale
-}
-
-/**
- * @param {number} opacity
- */
-function changeDanmakuOpacity(opacity) {
-  CM.options.global.opacity = opacity
-}
-
-export { init, toggleDanmaku, changeDanmakuSpeed, changeDanmakuOpacity }
+export { init, config }

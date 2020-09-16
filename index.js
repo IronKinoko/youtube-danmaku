@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Danmaku from './Danmaku'
-import { init } from './CM'
+import { init } from './configStore'
 
 window.addEventListener('load', (e) => {
   init(() =>

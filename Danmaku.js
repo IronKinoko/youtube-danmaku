@@ -15,7 +15,8 @@ import {
   createStyles,
   createMuiTheme,
 } from '@material-ui/core/styles'
-import { changeDanmakuSpeed, changeDanmakuOpacity, toggleDanmaku } from './CM'
+import { config } from './configStore'
+import { observer } from 'mobx-react'
 
 const muiTheme = createMuiTheme({
   palette: {
@@ -67,26 +68,17 @@ const useStyles = makeStyles((theme) =>
     switch: {},
   })
 )
-const Danmaku = () => {
+
+const Danmaku = observer(() => {
   const [open, setOpen] = useState(false)
   const classes = useStyles()
-  const [config, setConfig] = useLocalStorageState('ytb-danmaku-config', {
-    scale: 0.5,
-    opacity: 0.7,
-    use: true,
-  })
 
-  useEffect(() => {
-    toggleDanmaku(config.use)
-    changeDanmakuSpeed(config.scale)
-    changeDanmakuOpacity(config.opacity)
-  }, [])
+  const handleUse = () => {
+    config.toggleDanmaku(!config.use)
+  }
 
-  const handleSwitch = () => {
-    setConfig((t) => {
-      toggleDanmaku(!t.use)
-      return { ...t, use: !t.use }
-    })
+  const handleShowSticker = () => {
+    config.toggleShowSticker(!config.showStickers)
   }
 
   return (
@@ -113,7 +105,7 @@ const Danmaku = () => {
                 <ListItem
                   button
                   className={classes.listButton}
-                  onClick={handleSwitch}
+                  onClick={handleUse}
                 >
                   <ListItemText
                     primary="弹幕开关"
@@ -123,7 +115,26 @@ const Danmaku = () => {
                     }}
                   />
                   <ListItemSecondaryAction>
-                    <Switch checked={config.use} onClick={handleSwitch} />
+                    <Switch checked={config.use} onClick={handleUse} />
+                  </ListItemSecondaryAction>
+                </ListItem>
+                <ListItem
+                  button
+                  className={classes.listButton}
+                  onClick={handleShowSticker}
+                >
+                  <ListItemText
+                    primary="显示贴纸"
+                    primaryTypographyProps={{
+                      className: 'ytp-menuitem-label',
+                      style: { fontWeight: 500 },
+                    }}
+                  />
+                  <ListItemSecondaryAction>
+                    <Switch
+                      checked={config.showStickers}
+                      onClick={handleShowSticker}
+                    />
                   </ListItemSecondaryAction>
                 </ListItem>
                 <ListItem className={classes.listButton}>
@@ -140,8 +151,7 @@ const Danmaku = () => {
                           valueLabelDisplay="auto"
                           className={classes.slider}
                           onChange={(e, v) => {
-                            setConfig((t) => ({ ...t, scale: v }))
-                            changeDanmakuSpeed(v)
+                            config.changeDanmakuSpeed(v)
                           }}
                         />
                       </div>
@@ -162,8 +172,7 @@ const Danmaku = () => {
                           valueLabelDisplay="auto"
                           className={classes.slider}
                           onChange={(e, v) => {
-                            setConfig((t) => ({ ...t, opacity: v }))
-                            changeDanmakuOpacity(v)
+                            config.changeDanmakuOpacity(v)
                           }}
                         />
                       </div>
@@ -177,28 +186,6 @@ const Danmaku = () => {
       </span>
     </MuiThemeProvider>
   )
-}
+})
 
 export default Danmaku
-
-/**
- * @param {string} key
- * @param {any} defaultValue
- */
-function useLocalStorageState(key, defaultValue) {
-  const [value, setValue] = useState(() => {
-    let res = localStorage.getItem(key)
-    if (res !== null) {
-      try {
-        return JSON.parse(res)
-      } catch (error) {}
-    }
-    return defaultValue
-  })
-
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value))
-  }, [value, key])
-
-  return [value, setValue]
-}
