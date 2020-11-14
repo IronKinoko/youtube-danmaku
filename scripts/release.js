@@ -30,6 +30,8 @@ async function release() {
 
   pkg.version = options.version
 
+  cp.execSync('git pull')
+  cp.execSync('npm i')
   cp.execSync('npm run build')
 
   let template = fs.readFileSync(rPath('./ytb-danmaku.template'), 'utf-8')
