@@ -10,7 +10,11 @@
     "release": "node ./scripts/release.js"
   },
   "author": "IronKinoko",
-  "homepage": "https://github.com/IronKinoko/ytb-danmaku",
+  "homepage": "https://greasyfork.org/scripts/409684-youtube-danmaku",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IronKinoko/ytb-danmaku"
+  },
   "license": "MIT",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
