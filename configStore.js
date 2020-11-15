@@ -199,11 +199,13 @@ function buildControls() {
 function subEvent() {
   const video = document.querySelector('video')
   video.addEventListener('pause', () => {
+    if (!config.use) return
     playing = false
     CM.stop()
     clearInterval(timeKey)
   })
   video.addEventListener('play', () => {
+    if (!config.use) return
     playing = true
     CM.clear()
     CM.start()
