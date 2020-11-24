@@ -9,7 +9,7 @@
 // @exclude      https://www.youtube.com/live_chat*
 // @grant        none
 // @require      https://cdn.jsdelivr.net/npm/comment-core-library-html-comment@1.0.0/dist/CommentCoreLibrary.js
-// @require      https://cdn.jsdelivr.net/gh/IronKinoko/ytb-danmaku@##hash##/dist/ytb-danmaku-core.min.js
+// @require      https://cdn.jsdelivr.net/gh/IronKinoko/ytb-danmaku@8b7b3e77b8fc83243a6cd4f0c00b9a934ad37745/dist/ytb-danmaku-core.min.js
 // ==/UserScript==
 
 ;(function () {
