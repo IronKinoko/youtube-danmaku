@@ -87,8 +87,8 @@ const useStyles = makeStyles((theme) =>
 )
 
 const Danmaku = observer(() => {
-  const [open, setOpen] = useState(true)
-  const [pageKey, setPageKey] = useState(1)
+  const [open, setOpen] = useState(false)
+  const [pageKey, setPageKey] = useState(0)
   const classes = useStyles()
 
   const handleUse = () => {
@@ -107,7 +107,7 @@ const Danmaku = observer(() => {
     if (open === false) setPageKey(0)
   }, [open])
 
-  const height = pageKey === 0 ? 264 : 400
+  const height = pageKey === 0 ? 246 : 400
 
   return (
     <MuiThemeProvider theme={muiTheme}>
