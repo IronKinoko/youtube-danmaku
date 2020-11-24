@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fake livechat</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mockjs@1.1.0/dist/mock.min.js"></script>
+  </head>
+  <body>
+    <div id="livechat">
+      <yt-live-chat-text-message-renderer
+        v-for="item in dataSource"
+        :key="item.id"
+        :id="item.id"
+      >
+        <div id="message">{{item.message}}</div>
+      </yt-live-chat-text-message-renderer>
+    </div>
+    <script>
+      new Vue({
+        el: '#livechat',
+        data: {
+          dataSource: Mock.mock({
+            'data|10': [{ message: '@csentence', id: '@id' }],
+          }).data,
+        },
+        mounted() {
+          setInterval(() => {
+            this.dataSource.shift()
+            this.dataSource.push(
+              Mock.mock({ message: '@csentence', id: '@id' })
+            )
+          }, 1000)
+        },
+      })
+    </script>
+  </body>
+</html>

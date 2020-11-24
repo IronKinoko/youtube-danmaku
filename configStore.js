@@ -18,6 +18,8 @@ class DanmakuOptions {
   @observable opacity = 0.7
   @observable showStickers = true
   @observable scale = 0.5
+  @observable filterList = []
+  @observable filterUse = false
 
   constructor() {
     const config = JSON.parse(
@@ -27,12 +29,15 @@ class DanmakuOptions {
           showStickers: true,
           scale: 0.5,
           opacity: 0.7,
+          filterList: [],
         })
     )
     this.use = config.use
     this.opacity = config.opacity
     this.showStickers = config.showStickers
     this.scale = config.scale
+    this.filterList = config.filterList || []
+    this.filterUse = config.filterUse || false
   }
 
   /**
@@ -46,7 +51,7 @@ class DanmakuOptions {
       CM.start()
       timeKey = setInterval(() => {
         getDanmaku()
-      }, 100)
+      }, 50)
     } else {
       playing = false
       CM.stop()
@@ -76,6 +81,31 @@ class DanmakuOptions {
    */
   @action toggleShowSticker(showStickers) {
     this.showStickers = showStickers
+  }
+
+  /**
+   * @param {string} content
+   */
+  @action addFilter(content) {
+    if (content.trim().length === 0) return
+    config.filterList.push({
+      content,
+      isuse: true,
+      id: Math.random().toString(16).slice(2),
+    })
+  }
+
+  @action changeFilterUse(id) {
+    const target = config.filterList.find((o) => o.id === id)
+    target.isuse = !target.isuse
+  }
+
+  @action deleteFilter(id) {
+    config.filterList = config.filterList.filter((o) => o.id !== id)
+  }
+
+  @action toggleFilterUse(bool) {
+    config.filterUse = bool
   }
 }
 
@@ -170,21 +200,29 @@ function getDanmaku() {
       idoc.querySelectorAll('yt-live-chat-text-message-renderer')
     )
     const lastMessageNode = messagesNode.pop()
-    if (lastMessageNode) {
-      const nextID = lastMessageNode.id
-      const message = config.showStickers
-        ? lastMessageNode.querySelector('#message').innerHTML
-        : lastMessageNode.querySelector('#message').innerText
-      playing &&
-        prevID !== nextID &&
-        CM.send({
-          text: message,
-          mode: 1,
-          color: 0xffffff,
-          useHTML: config.showStickers,
-        })
-      prevID = nextID
+    if (!lastMessageNode) return
+
+    const nextID = lastMessageNode.id
+    if (!(playing && prevID !== nextID)) return
+    prevID = nextID
+
+    if (config.filterUse) {
+      const filterList = config.filterList.filter((o) => o.isuse)
+      const messageText =
+        lastMessageNode.querySelector('#message').innerText || ''
+      if (filterList.some((o) => messageText.includes(o.content))) return
     }
+
+    const message = config.showStickers
+      ? lastMessageNode.querySelector('#message').innerHTML
+      : lastMessageNode.querySelector('#message').innerText
+
+    CM.send({
+      text: message,
+      mode: 1,
+      color: 0xffffff,
+      useHTML: config.showStickers,
+    })
   }
 }
 
@@ -211,7 +249,7 @@ function subEvent() {
     CM.start()
     timeKey = setInterval(() => {
       getDanmaku()
-    }, 100)
+    }, 50)
   })
 
   window.addEventListener('resize', () => {
