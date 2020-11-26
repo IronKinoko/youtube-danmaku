@@ -1,4 +1,4 @@
-import { autorun, observable, action } from 'mobx'
+import { action, autorun, observable } from 'mobx'
 
 let playing = true
 let timeKey
