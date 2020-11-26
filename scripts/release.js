@@ -34,7 +34,10 @@ async function release() {
   cp.execSync('npm i')
   cp.execSync('npm run build')
 
-  let template = fs.readFileSync(rPath('./ytb-danmaku.template'), 'utf-8')
+  let template = fs.readFileSync(
+    rPath('../public/ytb-danmaku.template'),
+    'utf-8'
+  )
   const ytbDanmakuCore = fs.readFileSync(
     rPath('../dist/ytb-danmaku-core.min.js'),
     'utf-8'
@@ -43,7 +46,7 @@ async function release() {
   const oneLineCoreCode = ytbDanmakuCore.replace(/[\r\n]/g, '')
   template = template.replace(/##version##/gim, pkg.version)
 
-  // fs.writeFileSync(rPath('../package.json'), JSON.stringify(pkg, null, 2))
+  fs.writeFileSync(rPath('../package.json'), JSON.stringify(pkg, null, 2))
   fs.writeFileSync(rPath('../dist/ytb-danmaku-core.min.js'), oneLineCoreCode)
   fs.writeFileSync(rPath('../dist/ytb-danmaku.user.js'), template)
 
@@ -56,11 +59,11 @@ async function release() {
   )
   fs.writeFileSync(rPath('../dist/ytb-danmaku.user.js'), template)
 
-  // cp.execSync('git add .')
-  // cp.execSync(`git commit -m "${pkg.version} release"`)
-  // cp.execSync(`git tag v${pkg.version}`)
-  // cp.execSync('git push')
-  // cp.execSync('git push origin --tags')
+  cp.execSync('git add .')
+  cp.execSync(`git commit -m "${pkg.version} release"`)
+  cp.execSync(`git tag v${pkg.version}`)
+  cp.execSync('git push')
+  cp.execSync('git push origin --tags')
 
   console.log(`build success, version: ${pkg.name}@${pkg.version}`)
 }
