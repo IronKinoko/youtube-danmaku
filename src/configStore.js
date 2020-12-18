@@ -2,7 +2,7 @@ import { action, autorun, observable } from 'mobx'
 
 let playing = true
 let timeKey
-let prevID
+let prevID = []
 let CM
 /**
  * @type {MutationObserver}
@@ -203,8 +203,8 @@ function getDanmaku() {
     if (!lastMessageNode) return
 
     const nextID = lastMessageNode.id
-    if (!(playing && prevID !== nextID)) return
-    prevID = nextID
+    if (!playing || prevID.includes(nextID)) return
+    prevID = [...prevID, nextID].slice(0, 20)
 
     if (config.filterUse) {
       const filterList = config.filterList.filter((o) => o.isuse)
