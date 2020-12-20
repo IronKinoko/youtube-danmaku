@@ -1,7 +1,7 @@
 import { action, autorun, observable } from 'mobx'
 
-let playing = true
-let timeKey
+let sendDanmakuLock = false
+let playing = false
 let prevID = []
 let CM
 /**
@@ -49,14 +49,11 @@ class DanmakuOptions {
       playing = true
       CM.clear()
       CM.start()
-      timeKey = setInterval(() => {
-        getDanmaku()
-      }, 50)
+      rAFDanmaku()
     } else {
       playing = false
       CM.stop()
       CM.clear()
-      clearInterval(timeKey)
     }
   }
 
@@ -137,7 +134,7 @@ function init(cb) {
     } else {
       inited = false
       prevVID = null
-      clearInterval(timeKey)
+      playin = false
     }
   })
   bodyObserver.observe(document.body, { childList: true, subtree: true })
@@ -160,7 +157,6 @@ function inject(cb) {
   try {
     console.log('ytb-danmaku-inited')
 
-    clearInterval(timeKey)
     document.getElementById('ytd-player').classList.add('danmaku-container')
     document
       .querySelector('div.ytp-left-controls')
@@ -199,31 +195,39 @@ function getDanmaku() {
     const messagesNode = Array.from(
       idoc.querySelectorAll('yt-live-chat-text-message-renderer')
     )
-    const lastMessageNode = messagesNode.pop()
-    if (!lastMessageNode) return
+    const lastMessageNodes = messagesNode.slice(-10)
+    lastMessageNodes.forEach((lastMessageNode) => {
+      const nextID = lastMessageNode.id
+      if (!playing || prevID.includes(nextID)) return
+      prevID = [...prevID, nextID].slice(-20)
 
-    const nextID = lastMessageNode.id
-    if (!playing || prevID.includes(nextID)) return
-    prevID = [...prevID, nextID].slice(-20)
+      if (config.filterUse) {
+        const filterList = config.filterList.filter((o) => o.isuse)
+        const messageText =
+          lastMessageNode.querySelector('#message').innerText || ''
+        if (filterList.some((o) => messageText.includes(o.content))) return
+      }
 
-    if (config.filterUse) {
-      const filterList = config.filterList.filter((o) => o.isuse)
-      const messageText =
-        lastMessageNode.querySelector('#message').innerText || ''
-      if (filterList.some((o) => messageText.includes(o.content))) return
-    }
+      const message = config.showStickers
+        ? lastMessageNode.querySelector('#message').innerHTML
+        : lastMessageNode.querySelector('#message').innerText
 
-    const message = config.showStickers
-      ? lastMessageNode.querySelector('#message').innerHTML
-      : lastMessageNode.querySelector('#message').innerText
-
-    CM.send({
-      text: message,
-      mode: 1,
-      color: 0xffffff,
-      useHTML: config.showStickers,
+      CM.send({
+        text: message,
+        mode: 1,
+        color: 0xffffff,
+        useHTML: config.showStickers,
+      })
     })
   }
+}
+
+function rAFDanmaku() {
+  if (playing) requestAnimationFrame(rAFDanmaku)
+  if (sendDanmakuLock) return
+  sendDanmakuLock = true
+  getDanmaku()
+  sendDanmakuLock = false
 }
 
 function buildControls() {
@@ -240,16 +244,13 @@ function subEvent() {
     if (!config.use) return
     playing = false
     CM.stop()
-    clearInterval(timeKey)
   })
   video.addEventListener('play', () => {
     if (!config.use) return
     playing = true
     CM.clear()
     CM.start()
-    timeKey = setInterval(() => {
-      getDanmaku()
-    }, 50)
+    rAFDanmaku()
   })
 
   window.addEventListener('resize', () => {
