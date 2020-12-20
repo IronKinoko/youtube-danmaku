@@ -14,7 +14,7 @@
 // @require      https://cdn.jsdelivr.net/npm/mobx-react-lite@2.2.2/dist/mobxreactlite.umd.production.min.js
 // @require      https://cdn.jsdelivr.net/npm/mobx-react@6.3.0/dist/mobx-react.umd.js
 // @require      https://cdn.jsdelivr.net/npm/comment-core-library-html-comment@1.0.0/dist/CommentCoreLibrary.js
-// @require      https://cdn.jsdelivr.net/gh/IronKinoko/ytb-danmaku@##hash##/dist/ytb-danmaku-core.min.js
+// @require      https://cdn.jsdelivr.net/gh/IronKinoko/ytb-danmaku@6f5a28c46ce7807dbb22942560df3c63eee86930/dist/ytb-danmaku-core.min.js
 // ==/UserScript==
 
 ;(function () {
