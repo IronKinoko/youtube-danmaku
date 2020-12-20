@@ -204,7 +204,7 @@ function getDanmaku() {
 
     const nextID = lastMessageNode.id
     if (!playing || prevID.includes(nextID)) return
-    prevID = [...prevID, nextID].slice(0, 20)
+    prevID = [...prevID, nextID].slice(-20)
 
     if (config.filterUse) {
       const filterList = config.filterList.filter((o) => o.isuse)
