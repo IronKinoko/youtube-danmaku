@@ -12,6 +12,8 @@
 
 ## ChangeLog/更新日志
 
+v2.4.0 feat: 增加渲染SC
+
 v2.3.0 chore: 重构代码目录结构, 用webpack替换parcel，使用更多的cdn资源
 
 v2.2.0 feat: 增加弹幕过滤

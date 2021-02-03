@@ -1,4 +1,5 @@
 import { action, autorun, observable } from 'mobx'
+import { rgba2hex } from './utils'
 
 let sendDanmakuLock = false
 let playing = false
@@ -193,11 +194,14 @@ function getDanmaku() {
      */
     const idoc = iframe.contentDocument
     const messagesNode = Array.from(
-      idoc.querySelectorAll('yt-live-chat-text-message-renderer')
+      idoc.querySelectorAll(
+        'yt-live-chat-paid-message-renderer,yt-live-chat-text-message-renderer'
+      )
     )
     const lastMessageNodes = messagesNode.slice(-10)
     lastMessageNodes.forEach((lastMessageNode) => {
       const nextID = lastMessageNode.id
+
       if (!playing || prevID.includes(nextID)) return
       prevID = [...prevID, nextID].slice(-20)
 
@@ -212,10 +216,20 @@ function getDanmaku() {
         ? lastMessageNode.querySelector('#message').innerHTML
         : lastMessageNode.querySelector('#message').innerText
 
+      const isPaidMessage =
+        lastMessageNode.tagName.toLowerCase() ===
+        'yt-live-chat-paid-message-renderer'
+
       CM.send({
         text: message,
         mode: 1,
-        color: 0xffffff,
+        color: isPaidMessage
+          ? rgba2hex(
+              getComputedStyle(lastMessageNode).getPropertyValue(
+                '--yt-live-chat-paid-message-primary-color'
+              )
+            )
+          : 0xffffff,
         useHTML: config.showStickers,
       })
     })

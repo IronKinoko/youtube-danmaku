@@ -9,27 +9,34 @@
   </head>
   <body>
     <div id="livechat">
-      <yt-live-chat-text-message-renderer
-        v-for="item in dataSource"
-        :key="item.id"
-        :id="item.id"
-      >
-        <div id="message">{{item.message}}</div>
-      </yt-live-chat-text-message-renderer>
+      <ul>
+        <li v-for="item in dataSource" :key="item.id">
+          <yt-live-chat-text-message-renderer v-if="item.paid" :id="item.id">
+            <div id="message">{{item.message}}</div>
+          </yt-live-chat-text-message-renderer>
+          <yt-live-chat-paid-message-renderer
+            v-if="!item.paid"
+            :id="item.id"
+            style="--yt-live-chat-paid-message-primary-color:rgba(29,233,182,1);"
+          >
+            <div id="message">[paid]{{item.message}}</div>
+          </yt-live-chat-paid-message-renderer>
+        </li>
+      </ul>
     </div>
     <script>
       new Vue({
         el: '#livechat',
         data: {
           dataSource: Mock.mock({
-            'data|10': [{ message: '@csentence', id: '@id' }],
+            'data|10': [{ message: '@csentence', id: '@id', paid: '@bool' }],
           }).data,
         },
         mounted() {
           setInterval(() => {
             this.dataSource.shift()
             this.dataSource.push(
-              Mock.mock({ message: '@csentence', id: '@id' })
+              Mock.mock({ message: '@csentence', id: '@id', paid: '@bool' })
             )
           }, 1000)
         },
