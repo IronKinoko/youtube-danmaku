@@ -19,6 +19,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "lodash.merge": "^4.6.2",
     "mobx": "^5.15.6",
     "mobx-react": "^6.3.0",
     "react": "^16.14.0",

@@ -101,11 +101,15 @@ const Danmaku = observer(() => {
     config.toggleShowSticker(!config.showStickers)
   }
 
+  const handleShowSuperChat = () => {
+    config.toggleShowSuperChat(!config.showSuperChat)
+  }
+
   useEffect(() => {
     if (open === false) setPageKey(0)
   }, [open])
 
-  const height = pageKey === 0 ? 246 : 400
+  const height = pageKey === 0 ? 288 : 400
 
   return (
     <MuiThemeProvider theme={muiTheme}>
@@ -165,6 +169,25 @@ const Danmaku = observer(() => {
                         <Switch
                           checked={config.showStickers}
                           onClick={handleShowSticker}
+                        />
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                    <ListItem
+                      button
+                      className={classes.listButton}
+                      onClick={handleShowSuperChat}
+                    >
+                      <ListItemText
+                        primary="显示Super Chat"
+                        primaryTypographyProps={{
+                          className: 'ytp-menuitem-label',
+                          style: { fontWeight: 500 },
+                        }}
+                      />
+                      <ListItemSecondaryAction>
+                        <Switch
+                          checked={config.showSuperChat}
+                          onClick={handleShowSuperChat}
                         />
                       </ListItemSecondaryAction>
                     </ListItem>

@@ -12,6 +12,8 @@
 
 ## ChangeLog/更新日志
 
+v2.4.1 feat: 增加渲染SC控制开关
+
 v2.4.0 feat: 增加渲染SC
 
 v2.3.0 chore: 重构代码目录结构, 用webpack替换parcel，使用更多的cdn资源

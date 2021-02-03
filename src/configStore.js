@@ -17,6 +17,7 @@ let bodyObserver
 class DanmakuOptions {
   @observable use = true
   @observable opacity = 0.7
+  @observable showSuperChat = false
   @observable showStickers = true
   @observable scale = 0.5
   @observable filterList = []
@@ -28,6 +29,7 @@ class DanmakuOptions {
         JSON.stringify({
           use: true,
           showStickers: true,
+          showSuperChat: false,
           scale: 0.5,
           opacity: 0.7,
           filterList: [],
@@ -36,6 +38,7 @@ class DanmakuOptions {
     this.use = config.use
     this.opacity = config.opacity
     this.showStickers = config.showStickers
+    this.showSuperChat = config.showSuperChat || false
     this.scale = config.scale
     this.filterList = config.filterList || []
     this.filterUse = config.filterUse || false
@@ -79,6 +82,12 @@ class DanmakuOptions {
    */
   @action toggleShowSticker(showStickers) {
     this.showStickers = showStickers
+  }
+  /**
+   * @param {boolean} showSuperChat
+   */
+  @action toggleShowSuperChat(showSuperChat) {
+    this.showSuperChat = showSuperChat
   }
 
   /**
@@ -195,7 +204,9 @@ function getDanmaku() {
     const idoc = iframe.contentDocument
     const messagesNode = Array.from(
       idoc.querySelectorAll(
-        'yt-live-chat-paid-message-renderer,yt-live-chat-text-message-renderer'
+        config.showSuperChat
+          ? 'yt-live-chat-paid-message-renderer,yt-live-chat-text-message-renderer'
+          : 'yt-live-chat-text-message-renderer'
       )
     )
     const lastMessageNodes = messagesNode.slice(-10)
