@@ -2,6 +2,11 @@
 
 依附于油猴 弹幕核心逻辑由[jabbany/CommentCoreLibrary](https://github.com/jabbany/CommentCoreLibrary)提供
 
+## 特性
+
+- 基础弹幕功能，可自定义开关、弹幕速度、透明度、贴纸渲染、superchat渲染
+- 弹幕过滤功能
+
 ## Screenshot/截图
 
 <img widtd="100%" src="https://raw.githubusercontent.com/IronKinoko/asset/master/ytb-danmaku/screenshot.png"/>
