@@ -1,56 +1,57 @@
-import Box from '@material-ui/core/Box'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import Divider from '@material-ui/core/Divider'
-import Fade from '@material-ui/core/Fade'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
-import ListItemText from '@material-ui/core/ListItemText'
-import Slider from '@material-ui/core/Slider'
+import React, { useEffect, useState } from "react";
 import {
+  Box,
+  ClickAwayListener,
+  Divider,
+  Fade,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  Slider,
   createMuiTheme,
   createStyles,
   makeStyles,
   ThemeProvider as MuiThemeProvider,
-} from '@material-ui/core/styles'
-import Switch from '@material-ui/core/Switch'
-import Tooltip from '@material-ui/core/Tooltip'
-import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
-import ArrowForwardIos from '@material-ui/icons/ArrowForwardIos'
-import DeleteIcon from '@material-ui/icons/Delete'
-import { observer } from 'mobx-react'
-import React, { useEffect, useState } from 'react'
-import { config } from './configStore'
+  Switch,
+  Tooltip,
+} from "@material-ui/core";
+
+import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
+import ArrowForwardIos from "@material-ui/icons/ArrowForwardIos";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { observer } from "mobx-react";
+import { config } from "./configStore";
 const muiTheme = createMuiTheme({
   palette: {
-    secondary: { main: '#f00' },
+    secondary: { main: "#f00" },
   },
   overrides: {
     MuiSwitch: {
-      thumb: { backgroundColor: 'white' },
-      track: { opacity: '1 !important' },
+      thumb: { backgroundColor: "white" },
+      track: { opacity: "1 !important" },
     },
   },
-})
+});
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
-      position: 'relative',
+      position: "relative",
     },
     controls: {
-      backgroundColor: 'rgba(28,28,28,0.9)',
-      position: 'absolute',
+      backgroundColor: "rgba(28,28,28,0.9)",
+      position: "absolute",
       bottom: 40,
-      color: 'white',
-      left: '50%',
-      transform: 'translateX(-50%)',
+      color: "white",
+      left: "50%",
+      transform: "translateX(-50%)",
       zIndex: theme.zIndex.tooltip,
       width: 300,
     },
     sliderRoot: {
-      display: 'flex',
-      alignItems: 'center',
+      display: "flex",
+      alignItems: "center",
     },
     slider: {
       margin: theme.spacing(0, 1, 0, 2),
@@ -58,58 +59,58 @@ const useStyles = makeStyles((theme) =>
     },
     tooltip: {
       padding: theme.spacing(0.5, 1),
-      backgroundColor: 'rgba(28,28,28,0.9)',
+      backgroundColor: "rgba(28,28,28,0.9)",
       fontSize: 13,
       borderRadius: 2,
       fontWeight: 400,
     },
     listButton: {
-      '&:hover': {
-        backgroundColor: 'rgba(255,255,255,.1)',
+      "&:hover": {
+        backgroundColor: "rgba(255,255,255,.1)",
       },
     },
     scrollPanelContainer: {
       width: 300,
-      overflow: 'hidden',
-      transition: theme.transitions.create('height'),
+      overflow: "hidden",
+      transition: theme.transitions.create("height"),
     },
     scrollPanel: {
-      display: 'flex',
-      transition: theme.transitions.create('transform'),
-      '&>*': {
+      display: "flex",
+      transition: theme.transitions.create("transform"),
+      "&>*": {
         width: 300,
         flexShrink: 0,
       },
     },
   })
-)
+);
 
 const Danmaku = observer(() => {
-  const [open, setOpen] = useState(false)
-  const [pageKey, setPageKey] = useState(0)
-  const classes = useStyles()
+  const [open, setOpen] = useState(false);
+  const [pageKey, setPageKey] = useState(0);
+  const classes = useStyles();
 
   const handleUse = () => {
-    config.toggleDanmaku(!config.use)
-  }
+    config.toggleDanmaku(!config.use);
+  };
 
   const handleFilterUse = () => {
-    config.toggleFilterUse(!config.filterUse)
-  }
+    config.toggleFilterUse(!config.filterUse);
+  };
 
   const handleShowSticker = () => {
-    config.toggleShowSticker(!config.showStickers)
-  }
+    config.toggleShowSticker(!config.showStickers);
+  };
 
   const handleShowSuperChat = () => {
-    config.toggleShowSuperChat(!config.showSuperChat)
-  }
+    config.toggleShowSuperChat(!config.showSuperChat);
+  };
 
   useEffect(() => {
-    if (open === false) setPageKey(0)
-  }, [open])
+    if (open === false) setPageKey(0);
+  }, [open]);
 
-  const height = pageKey === 0 ? 288 : 400
+  const height = pageKey === 0 ? 288 : 400;
 
   return (
     <MuiThemeProvider theme={muiTheme}>
@@ -120,7 +121,7 @@ const Danmaku = observer(() => {
           classes={{ tooltip: classes.tooltip }}
         >
           <button
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: "center" }}
             onClick={() => setOpen(true)}
             className="ytp-button"
           >
@@ -145,7 +146,7 @@ const Danmaku = observer(() => {
                       <ListItemText
                         primary="弹幕开关"
                         primaryTypographyProps={{
-                          className: 'ytp-menuitem-label',
+                          className: "ytp-menuitem-label",
                           style: { fontWeight: 500 },
                         }}
                       />
@@ -161,7 +162,7 @@ const Danmaku = observer(() => {
                       <ListItemText
                         primary="显示贴纸"
                         primaryTypographyProps={{
-                          className: 'ytp-menuitem-label',
+                          className: "ytp-menuitem-label",
                           style: { fontWeight: 500 },
                         }}
                       />
@@ -180,7 +181,7 @@ const Danmaku = observer(() => {
                       <ListItemText
                         primary="显示Super Chat"
                         primaryTypographyProps={{
-                          className: 'ytp-menuitem-label',
+                          className: "ytp-menuitem-label",
                           style: { fontWeight: 500 },
                         }}
                       />
@@ -205,7 +206,7 @@ const Danmaku = observer(() => {
                               valueLabelDisplay="auto"
                               className={classes.slider}
                               onChange={(e, v) => {
-                                config.changeDanmakuSpeed(v)
+                                config.changeDanmakuSpeed(v);
                               }}
                             />
                           </div>
@@ -226,7 +227,7 @@ const Danmaku = observer(() => {
                               valueLabelDisplay="auto"
                               className={classes.slider}
                               onChange={(e, v) => {
-                                config.changeDanmakuOpacity(v)
+                                config.changeDanmakuOpacity(v);
                               }}
                             />
                           </div>
@@ -237,7 +238,7 @@ const Danmaku = observer(() => {
                       className={classes.listButton}
                       button
                       onClick={() => {
-                        setPageKey(1)
+                        setPageKey(1);
                       }}
                     >
                       <ListItemText primary="弹幕屏蔽" />
@@ -252,7 +253,7 @@ const Danmaku = observer(() => {
                         className={classes.listButton}
                         button
                         onClick={() => {
-                          setPageKey(0)
+                          setPageKey(0);
                         }}
                       >
                         <ArrowBackIos color="inherit" />
@@ -264,7 +265,7 @@ const Danmaku = observer(() => {
                           />
                         </ListItemSecondaryAction>
                       </ListItem>
-                      <Divider style={{ backgroundColor: '#444' }} />
+                      <Divider style={{ backgroundColor: "#444" }} />
                     </List>
                     <Fade in={config.filterUse} unmountOnExit>
                       <FilterDanmaku />
@@ -277,30 +278,30 @@ const Danmaku = observer(() => {
         </Fade>
       </span>
     </MuiThemeProvider>
-  )
-})
+  );
+});
 
 const useFilterStyles = makeStyles((theme) =>
   createStyles({
     root: {
-      textAlign: 'left',
+      textAlign: "left",
       padding: theme.spacing(1, 2),
     },
     inputContainer: {
-      display: 'flex',
+      display: "flex",
     },
     input: {
-      border: '1px solid rgba(255,255,255,.4)',
+      border: "1px solid rgba(255,255,255,.4)",
       borderRadius: 2,
       flex: 1,
     },
     addbtn: {
-      border: '1px solid rgba(255,255,255,.4)',
+      border: "1px solid rgba(255,255,255,.4)",
       borderRadius: 2,
       marginLeft: 8,
-      backgroundColor: 'transparent',
+      backgroundColor: "transparent",
       padding: theme.spacing(0, 1),
-      color: 'white',
+      color: "white",
     },
     table: {
       fontSize: 12,
@@ -310,48 +311,48 @@ const useFilterStyles = makeStyles((theme) =>
       marginBottom: theme.spacing(0.5),
     },
     row: {
-      display: 'flex',
+      display: "flex",
       padding: theme.spacing(0.25, 0),
     },
     op: {
       flex: 1,
-      display: 'flex',
-      justifyContent: 'space-between',
-      '& > :last-child': {
+      display: "flex",
+      justifyContent: "space-between",
+      "& > :last-child": {
         marginLeft: theme.spacing(1),
       },
-      '& > div': {
-        cursor: 'pointer',
+      "& > div": {
+        cursor: "pointer",
       },
     },
     delete: {
       marginRight: 4,
     },
     content: {
-      width: '100%',
+      width: "100%",
       maxWidth: 200,
       paddingRight: theme.spacing(1),
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
     },
     list: {
-      overflow: 'auto',
+      overflow: "auto",
       height: 260,
-      '&::-webkit-scrollbar': {
+      "&::-webkit-scrollbar": {
         width: 0,
       },
     },
   })
-)
+);
 const FilterDanmaku = observer(({ style }) => {
-  const classes = useFilterStyles()
-  const [state, setState] = useState('')
+  const classes = useFilterStyles();
+  const [state, setState] = useState("");
 
   const handleAdd = () => {
-    config.addFilter(state)
-    setState('')
-  }
+    config.addFilter(state);
+    setState("");
+  };
 
   return (
     <div className={classes.root} style={style}>
@@ -362,8 +363,8 @@ const FilterDanmaku = observer(({ style }) => {
           value={state}
           onChange={(e) => setState(e.target.value)}
           onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              handleAdd()
+            if (e.key === "Enter") {
+              handleAdd();
             }
           }}
         />
@@ -387,12 +388,12 @@ const FilterDanmaku = observer(({ style }) => {
               <div className={classes.content}>{o.content}</div>
               <div className={classes.op}>
                 <div onClick={() => config.changeFilterUse(o.id)}>
-                  {o.isuse ? '启用' : '禁用'}
+                  {o.isuse ? "启用" : "禁用"}
                 </div>
                 <div
                   className={classes.delete}
                   onClick={() => {
-                    config.deleteFilter(o.id)
+                    config.deleteFilter(o.id);
                   }}
                 >
                   <DeleteIcon style={{ fontSize: 16 }} />
@@ -403,6 +404,6 @@ const FilterDanmaku = observer(({ style }) => {
         </div>
       </div>
     </div>
-  )
-})
-export default Danmaku
+  );
+});
+export default Danmaku;
