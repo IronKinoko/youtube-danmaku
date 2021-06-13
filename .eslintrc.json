@@ -17,5 +17,7 @@
   "globals": {
     "CommentManager": "readonly"
   },
-  "rules": {}
+  "rules": {
+    "react/prop-types": "off"
+  }
 }

@@ -22,16 +22,13 @@ const config = {
       'react-dom': 'ReactDOM',
     },
   },
-  external: [
-    'mobx',
-    'mobx-react',
-    'react',
-    'react-dom',
-  ],
+  external: ['mobx', 'mobx-react', 'react', 'react-dom'],
   plugins: [
     babel({ babelHelpers: 'bundled' }),
     styles(),
-    nodeResolve(),
+    nodeResolve({
+      extensions: ['.js', '.jsx'],
+    }),
     commonjs(),
     replace({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
