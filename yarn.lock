@@ -972,6 +972,11 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@ironkinoko/danmaku@^1.1.6":
+  version "1.1.6"
+  resolved "https://registry.npmmirror.com/@ironkinoko/danmaku/-/danmaku-1.1.6.tgz#7d899549cf609c10c3ce8b3b51644cbc48372d29"
+  integrity sha512-rkpFx2q2oOAPjtlypVAlkBXiD907n1DUp5fur/Dluu7lsORQgXnLNE9X81jRavNCgpYSXbQNivrO9r5I1xdxqw==
+
 "@material-ui/core@^4.11.4":
   version "4.11.4"
   resolved "https://registry.nlark.com/@material-ui/core/download/@material-ui/core-4.11.4.tgz?cache=0&sync_timestamp=1621335867815&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40material-ui%2Fcore%2Fdownload%2F%40material-ui%2Fcore-4.11.4.tgz"
@@ -1571,11 +1576,6 @@ commander@^7.2.0:
   version "7.2.0"
   resolved "https://registry.nlark.com/commander/download/commander-7.2.0.tgz"
   integrity sha1-o2y1fQtQHOEI5NIFWaFQo5HZerc=
-
-comment-core-library-html-comment@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.nlark.com/comment-core-library-html-comment/download/comment-core-library-html-comment-1.0.0.tgz"
-  integrity sha1-ecAscQi2w5mak6g0X0E7ZmMaVns=
 
 commondir@^1.0.1:
   version "1.0.1"

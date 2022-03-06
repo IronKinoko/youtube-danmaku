@@ -14,6 +14,6 @@ export function genUserScriptInfo(pkg) {
 // @require      https://cdn.jsdelivr.net/npm/mobx@6.3.2/dist/mobx.umd.production.min.js
 // @require      https://cdn.jsdelivr.net/npm/mobx-react-lite@3.2.0/dist/mobxreactlite.umd.production.min.js
 // @require      https://cdn.jsdelivr.net/npm/mobx-react@7.2.0/dist/mobxreact.umd.production.min.js
-// @require      https://cdn.jsdelivr.net/npm/comment-core-library-html-comment@1.0.0/dist/CommentCoreLibrary.min.js
+// @require      https://cdn.jsdelivr.net/npm/@ironkinoko/danmaku@1.1.6/dist/danmaku.min.js
 // ==/UserScript==`
 }

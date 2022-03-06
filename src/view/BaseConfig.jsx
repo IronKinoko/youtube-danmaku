@@ -7,17 +7,17 @@ import {
   makeStyles,
   Slider,
   Switch,
-} from "@material-ui/core";
-import ArrowForwardIos from "@material-ui/icons/ArrowForwardIos";
-import { observer } from "mobx-react";
-import React from "react";
-import { config } from "../configStore";
+} from '@material-ui/core'
+import ArrowForwardIos from '@material-ui/icons/ArrowForwardIos'
+import { observer } from 'mobx-react'
+import React from 'react'
+import { config } from '../configStore'
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     sliderRoot: {
-      display: "flex",
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center',
     },
     slider: {
       margin: theme.spacing(0, 1, 0, 2),
@@ -25,34 +25,34 @@ const useStyles = makeStyles((theme) =>
     },
 
     listButton: {
-      "&:hover": {
-        backgroundColor: "rgba(255,255,255,.1)",
+      '&:hover': {
+        backgroundColor: 'rgba(255,255,255,.1)',
       },
     },
   })
-);
+)
 
 const BaseConfig = ({ switchPanel }) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   const handleUse = () => {
-    config.toggleDanmaku(!config.use);
-  };
+    config.toggleDanmaku(!config.use)
+  }
 
   const handleShowSticker = () => {
-    config.toggleShowSticker(!config.showStickers);
-  };
+    config.toggleShowSticker(!config.showStickers)
+  }
 
   const handleShowSuperChat = () => {
-    config.toggleShowSuperChat(!config.showSuperChat);
-  };
+    config.toggleShowSuperChat(!config.showSuperChat)
+  }
   return (
     <List id="k-base">
       <ListItem button className={classes.listButton} onClick={handleUse}>
         <ListItemText
           primary="弹幕开关"
           primaryTypographyProps={{
-            className: "ytp-menuitem-label",
+            className: 'ytp-menuitem-label',
             style: { fontWeight: 500 },
           }}
         />
@@ -68,7 +68,7 @@ const BaseConfig = ({ switchPanel }) => {
         <ListItemText
           primary="显示贴纸"
           primaryTypographyProps={{
-            className: "ytp-menuitem-label",
+            className: 'ytp-menuitem-label',
             style: { fontWeight: 500 },
           }}
         />
@@ -84,7 +84,7 @@ const BaseConfig = ({ switchPanel }) => {
         <ListItemText
           primary="显示Super Chat"
           primaryTypographyProps={{
-            className: "ytp-menuitem-label",
+            className: 'ytp-menuitem-label',
             style: { fontWeight: 500 },
           }}
         />
@@ -94,6 +94,27 @@ const BaseConfig = ({ switchPanel }) => {
             onClick={handleShowSuperChat}
           />
         </ListItemSecondaryAction>
+      </ListItem>
+      <ListItem className={classes.listButton}>
+        <ListItemText
+          primary={
+            <div className={classes.sliderRoot}>
+              <div className="ytp-menuitem-label">字体大小</div>
+              <Slider
+                color="secondary"
+                max={40}
+                step={1}
+                min={12}
+                value={config.fontSize}
+                valueLabelDisplay="auto"
+                className={classes.slider}
+                onChange={(e, v) => {
+                  config.changeDanmakuFontSize(v)
+                }}
+              />
+            </div>
+          }
+        />
       </ListItem>
       <ListItem className={classes.listButton}>
         <ListItemText
@@ -109,7 +130,7 @@ const BaseConfig = ({ switchPanel }) => {
                 valueLabelDisplay="auto"
                 className={classes.slider}
                 onChange={(e, v) => {
-                  config.changeDanmakuSpeed(v);
+                  config.changeDanmakuSpeed(v)
                 }}
               />
             </div>
@@ -130,17 +151,18 @@ const BaseConfig = ({ switchPanel }) => {
                 valueLabelDisplay="auto"
                 className={classes.slider}
                 onChange={(e, v) => {
-                  config.changeDanmakuOpacity(v);
+                  config.changeDanmakuOpacity(v)
                 }}
               />
             </div>
           }
         />
       </ListItem>
+
       <ListItem
         className={classes.listButton}
         button
-        onClick={() => switchPanel("filter")}
+        onClick={() => switchPanel('filter')}
       >
         <ListItemText primary="弹幕屏蔽" />
         <ListItemSecondaryAction>
@@ -148,7 +170,7 @@ const BaseConfig = ({ switchPanel }) => {
         </ListItemSecondaryAction>
       </ListItem>
     </List>
-  );
-};
+  )
+}
 
-export default observer(BaseConfig);
+export default observer(BaseConfig)

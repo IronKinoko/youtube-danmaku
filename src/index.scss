@@ -1,11 +1,11 @@
-.danmaku-container {
+.danmaku-stage {
   border: 0;
   bottom: 0;
   display: block;
   left: 0;
   margin: 0;
   overflow: hidden;
-  position: absolute;
+  position: absolute !important;
   right: 0;
   top: 0;
   touch-callout: none;
@@ -15,13 +15,15 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  pointer-events: none;
+  z-index: 20;
 }
-.danmaku-container .cmt {
+.danmaku-stage > div {
   pointer-events: none;
   color: #fff;
   font-family: SimHei, SimSun, Heiti, 'MS Mincho', Meiryo, 'Microsoft YaHei',
     monospace;
-  font-size: 25px;
+  font-size: var(--danmaku-font-size, 24px);
   letter-spacing: 0;
   line-height: 100%;
   margin: 0;
@@ -39,17 +41,8 @@
   transform-origin: 0 0;
   white-space: pre;
   word-break: keep-all;
-}
-.danmaku-container .cmt.no-shadow {
-  text-shadow: none;
-}
-.danmaku-container .cmt.reverse-shadow {
-  text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;
-}
-.danmaku-container .cmt.css-optimize {
-  will-change: transform;
-}
-.cmt.css-optimize img {
-  width: 24px;
-  height: 24px;
+  img {
+    width: 24px;
+    height: 24px;
+  }
 }

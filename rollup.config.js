@@ -7,6 +7,14 @@ import pkg from './package.json'
 import replace from '@rollup/plugin-replace'
 import commonjs from '@rollup/plugin-commonjs'
 
+const globals = {
+  mobx: 'mobx',
+  'mobx-react': 'mobxReact',
+  react: 'React',
+  'react-dom': 'ReactDOM',
+  '@ironkinoko/danmaku': 'Danmaku',
+}
+
 /** @type {import('rollup').RollupOptions} */
 const config = {
   input: 'src/index.js',
@@ -15,14 +23,9 @@ const config = {
     entryFileNames: 'index.user.js',
     format: 'iife',
     banner: genUserScriptInfo(pkg),
-    globals: {
-      mobx: 'mobx',
-      'mobx-react': 'mobxReact',
-      react: 'React',
-      'react-dom': 'ReactDOM',
-    },
+    globals,
   },
-  external: ['mobx', 'mobx-react', 'react', 'react-dom'],
+  external: Object.keys(globals),
   plugins: [
     babel({ babelHelpers: 'bundled' }),
     styles(),
