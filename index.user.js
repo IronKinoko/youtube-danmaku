@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         youtube-danmaku
 // @namespace    https://github.com/IronKinoko/ytb-danmaku
-// @version      2.4.3
+// @version      2.4.4
 // @license      MIT
 // @description  Youtube livechat danmaku
 // @author       Ironkinoko
@@ -13,9 +13,9 @@
 // @require      https://cdn.jsdelivr.net/npm/mobx@6.3.2/dist/mobx.umd.production.min.js
 // @require      https://cdn.jsdelivr.net/npm/mobx-react-lite@3.2.0/dist/mobxreactlite.umd.production.min.js
 // @require      https://cdn.jsdelivr.net/npm/mobx-react@7.2.0/dist/mobxreact.umd.production.min.js
-// @require      https://cdn.jsdelivr.net/npm/comment-core-library-html-comment@1.0.0/dist/CommentCoreLibrary.min.js
+// @require      https://cdn.jsdelivr.net/npm/@ironkinoko/danmaku@1.1.6/dist/danmaku.min.js
 // ==/UserScript==
-(function (React$3, ReactDOM, mobxReact, mobx) {
+(function (React$3, ReactDOM, mobxReact, mobx, Danmaku$2) {
   'use strict';
 
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -44,6 +44,7 @@
   var React__namespace = /*#__PURE__*/_interopNamespace(React$3);
   var ReactDOM__namespace = /*#__PURE__*/_interopNamespace(ReactDOM);
   var ReactDOM__default = /*#__PURE__*/_interopDefaultLegacy(ReactDOM);
+  var Danmaku__default = /*#__PURE__*/_interopDefaultLegacy(Danmaku$2);
 
   var e$1 = [],
       t$1 = [];
@@ -71,7 +72,7 @@
     }
   }
 
-  var css$2 = ".danmaku-container {\n  border: 0;\n  bottom: 0;\n  display: block;\n  left: 0;\n  margin: 0;\n  overflow: hidden;\n  position: absolute;\n  right: 0;\n  top: 0;\n  touch-callout: none;\n  -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n.danmaku-container .cmt {\n  pointer-events: none;\n  color: #fff;\n  font-family: SimHei, SimSun, Heiti, \"MS Mincho\", Meiryo, \"Microsoft YaHei\", monospace;\n  font-size: 25px;\n  letter-spacing: 0;\n  line-height: 100%;\n  margin: 0;\n  padding: 3px 0 0 0;\n  position: absolute;\n  text-decoration: none;\n  text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;\n  -webkit-text-size-adjust: none;\n  -ms-text-size-adjust: none;\n  text-size-adjust: none;\n  -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  -webkit-transform-origin: 0 0;\n  -ms-transform-origin: 0 0;\n  transform-origin: 0 0;\n  white-space: pre;\n  word-break: keep-all;\n}\n\n.danmaku-container .cmt.no-shadow {\n  text-shadow: none;\n}\n\n.danmaku-container .cmt.reverse-shadow {\n  text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;\n}\n\n.danmaku-container .cmt.css-optimize {\n  will-change: transform;\n}\n\n.cmt.css-optimize img {\n  width: 24px;\n  height: 24px;\n}";
+  var css$2 = ".danmaku-stage {\n  border: 0;\n  bottom: 0;\n  display: block;\n  left: 0;\n  margin: 0;\n  overflow: hidden;\n  position: absolute !important;\n  right: 0;\n  top: 0;\n  touch-callout: none;\n  -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  pointer-events: none;\n  z-index: 20;\n}\n\n.danmaku-stage > div {\n  pointer-events: none;\n  color: #fff;\n  font-family: SimHei, SimSun, Heiti, \"MS Mincho\", Meiryo, \"Microsoft YaHei\", monospace;\n  font-size: var(--danmaku-font-size, 24px);\n  letter-spacing: 0;\n  line-height: 100%;\n  margin: 0;\n  padding: 3px 0 0 0;\n  position: absolute;\n  text-decoration: none;\n  text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;\n  -webkit-text-size-adjust: none;\n  -ms-text-size-adjust: none;\n  text-size-adjust: none;\n  -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  -webkit-transform-origin: 0 0;\n  -ms-transform-origin: 0 0;\n  transform-origin: 0 0;\n  white-space: pre;\n  word-break: keep-all;\n}\n.danmaku-stage > div img {\n  width: 24px;\n  height: 24px;\n}";
   n$1(css$2,{});
 
   var common = {
@@ -14050,7 +14051,33 @@
     flip: false
   })(Tooltip);
 
-  var ArrowBackIos = {};
+  /**
+   *
+   * @export
+   * @param {HTMLElement} panel
+   */
+  function getPanelSize(panel) {
+    const clone = panel.cloneNode(true);
+    clone.style.opacity = 0;
+    clone.style.position = 'absolute';
+    clone.removeAttribute('hidden');
+    panel.parentNode.appendChild(clone);
+    const width = clone.scrollWidth;
+    const height = clone.scrollHeight;
+    clone.remove();
+    return {
+      width,
+      height
+    };
+  }
+  function getQueryString(name) {
+    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+    var r = location.search.substr(1).match(reg);
+    if (r != null) return unescape(decodeURI(r[2]));
+    return null;
+  }
+
+  var ArrowForwardIos = {};
 
   var interopRequireDefault = {exports: {}};
 
@@ -14174,62 +14201,20 @@
 
   var _interopRequireWildcard$2 = interopRequireWildcard.exports;
 
-  Object.defineProperty(ArrowBackIos, "__esModule", {
+  Object.defineProperty(ArrowForwardIos, "__esModule", {
     value: true
   });
-  var default_1$2 = ArrowBackIos.default = void 0;
+  var default_1$2 = ArrowForwardIos.default = void 0;
 
   var React$2 = _interopRequireWildcard$2(React__default['default']);
 
   var _createSvgIcon$2 = _interopRequireDefault$2(createSvgIcon);
 
   var _default$2 = (0, _createSvgIcon$2.default)( /*#__PURE__*/React$2.createElement("path", {
-    d: "M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
-  }), 'ArrowBackIos');
-
-  default_1$2 = ArrowBackIos.default = _default$2;
-
-  var ArrowForwardIos = {};
-
-  var _interopRequireDefault$1 = interopRequireDefault.exports;
-
-  var _interopRequireWildcard$1 = interopRequireWildcard.exports;
-
-  Object.defineProperty(ArrowForwardIos, "__esModule", {
-    value: true
-  });
-  var default_1$1 = ArrowForwardIos.default = void 0;
-
-  var React$1 = _interopRequireWildcard$1(React__default['default']);
-
-  var _createSvgIcon$1 = _interopRequireDefault$1(createSvgIcon);
-
-  var _default$1 = (0, _createSvgIcon$1.default)( /*#__PURE__*/React$1.createElement("path", {
     d: "M5.88 4.12L13.76 12l-7.88 7.88L8 22l10-10L8 2z"
   }), 'ArrowForwardIos');
 
-  default_1$1 = ArrowForwardIos.default = _default$1;
-
-  var Delete = {};
-
-  var _interopRequireDefault = interopRequireDefault.exports;
-
-  var _interopRequireWildcard = interopRequireWildcard.exports;
-
-  Object.defineProperty(Delete, "__esModule", {
-    value: true
-  });
-  var default_1 = Delete.default = void 0;
-
-  var React = _interopRequireWildcard(React__default['default']);
-
-  var _createSvgIcon = _interopRequireDefault(createSvgIcon);
-
-  var _default = (0, _createSvgIcon.default)( /*#__PURE__*/React.createElement("path", {
-    d: "M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-  }), 'Delete');
-
-  default_1 = Delete.default = _default;
+  default_1$2 = ArrowForwardIos.default = _default$2;
 
   function _defineProperty(obj, key, value) {
     if (key in obj) {
@@ -14246,21 +14231,12 @@
     return obj;
   }
 
-  function rgba2hex(rgba) {
-    rgba = rgba.match(/\((.*)\)/)[1];
-    rgba = rgba.split(',');
-    rgba.pop();
-    return parseInt(rgba.reduce((s, n) => s + r2h(n), '0x'));
-  }
-
-  function r2h(s) {
-    return parseInt(s).toString(16);
-  }
-
   let sendDanmakuLock = false;
   let playing = false;
   let prevID = [];
-  let CM;
+  /** @type {Danmaku} */
+
+  let core;
   /**
    * @type {MutationObserver}
    */
@@ -14284,26 +14260,23 @@
 
       _defineProperty(this, "scale", 0.5);
 
+      _defineProperty(this, "fontSize", 24);
+
       _defineProperty(this, "filterList", []);
 
       _defineProperty(this, "filterUse", false);
 
       mobx.makeAutoObservable(this);
-      const config = JSON.parse(localStorage.getItem("ytb-danmaku-config") || JSON.stringify({
+      Object.assign(this, {
         use: true,
         showStickers: true,
         showSuperChat: false,
-        scale: 0.5,
+        scale: 1,
         opacity: 0.7,
-        filterList: []
-      }));
-      this.use = config.use;
-      this.opacity = config.opacity;
-      this.showStickers = config.showStickers;
-      this.showSuperChat = config.showSuperChat || false;
-      this.scale = config.scale;
-      this.filterList = config.filterList || [];
-      this.filterUse = config.filterUse || false;
+        filterList: [],
+        filterUse: false,
+        fontSize: 24
+      }, JSON.parse(localStorage.getItem('ytb-danmaku-config')));
     }
     /**
      * @param {boolean} use
@@ -14315,13 +14288,11 @@
 
       if (use) {
         playing = true;
-        CM.clear();
-        CM.start();
+        core.show();
         rAFDanmaku();
       } else {
         playing = false;
-        CM.stop();
-        CM.clear();
+        core.hide();
       }
     }
     /**
@@ -14331,7 +14302,7 @@
 
     changeDanmakuSpeed(scale) {
       this.scale = scale;
-      CM.options.global.scale = 3.1 - scale;
+      core.speed = 144 * scale;
     }
     /**
      * @param {number} opacity
@@ -14340,7 +14311,18 @@
 
     changeDanmakuOpacity(opacity) {
       this.opacity = opacity;
-      CM.options.global.opacity = opacity;
+      core.opacity = opacity;
+    }
+    /**
+     * @param {number} fontSize
+     */
+
+
+    changeDanmakuFontSize(fontSize) {
+      var _document$querySelect;
+
+      this.fontSize = fontSize;
+      (_document$querySelect = document.querySelector('.danmaku-stage')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.style.setProperty('--danmaku-font-size', `${fontSize}px`);
     }
     /**
      * @param {boolean} showStickers
@@ -14389,7 +14371,7 @@
 
   const config = new DanmakuOptions();
   mobx.autorun(() => {
-    localStorage.setItem("ytb-danmaku-config", JSON.stringify(config));
+    localStorage.setItem('ytb-danmaku-config', JSON.stringify(config));
   });
 
   function init(cb) {
@@ -14398,11 +14380,12 @@
     let inited = false;
     if (bodyObserver) bodyObserver.disconnect();
     bodyObserver = new MutationObserver(() => {
-      if (location.pathname === "/watch") {
-        const VID = getQueryString("v");
+      if (location.pathname === '/watch') {
+        const VID = getQueryString('v');
 
         if (prevVID !== VID) {
           prevVID = VID;
+          inited = true;
           inject(cb);
         } else {
           if (!inited) {
@@ -14424,14 +14407,20 @@
 
   function inject(cb) {
     try {
-      console.log("ytb-danmaku-inited");
-      document.getElementById("ytd-player").classList.add("danmaku-container");
-      document.querySelector("div.ytp-left-controls").setAttribute("style", "overflow: unset;");
-      CM = new CommentManager(document.querySelector("#ytd-player"));
+      var _core;
+
+      console.trace('ytb-danmaku-inited');
+      const player = document.getElementById('movie_player');
+      if (!player) throw new Error('not find player');
+      document.querySelector('div.ytp-left-controls').setAttribute('style', 'overflow: unset;');
+      (_core = core) === null || _core === void 0 ? void 0 : _core.destroy();
+      core = new Danmaku__default['default']({
+        container: player
+      });
+      document.querySelector('#movie_player').prepend(core._.stage);
       config.changeDanmakuSpeed(config.scale);
       config.changeDanmakuOpacity(config.opacity);
-      CM.init(); // 初始化
-
+      config.changeDanmakuFontSize(config.fontSize);
       buildControls();
       subEvent();
       config.toggleDanmaku(config.use);
@@ -14439,27 +14428,20 @@
     } catch (e) {
       console.error(e);
       setTimeout(() => {
-        inject();
+        inject(cb);
       }, 3000);
     }
   }
 
-  function getQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-    var r = location.search.substr(1).match(reg);
-    if (r != null) return unescape(decodeURI(r[2]));
-    return null;
-  }
-
   function getDanmaku() {
-    const iframe = document.querySelector("iframe#chatframe");
+    const iframe = document.querySelector('iframe#chatframe');
 
     if (iframe) {
       /**
        * @type {Document}
        */
       const idoc = iframe.contentDocument;
-      const messagesNode = Array.from(idoc.querySelectorAll(config.showSuperChat ? "yt-live-chat-paid-message-renderer,yt-live-chat-text-message-renderer" : "yt-live-chat-text-message-renderer"));
+      const messagesNode = Array.from(idoc.querySelectorAll(config.showSuperChat ? 'yt-live-chat-paid-message-renderer,yt-live-chat-text-message-renderer' : 'yt-live-chat-text-message-renderer'));
       const lastMessageNodes = messagesNode.slice(-10);
       lastMessageNodes.forEach(lastMessageNode => {
         const nextID = lastMessageNode.id;
@@ -14468,17 +14450,28 @@
 
         if (config.filterUse) {
           const filterList = config.filterList.filter(o => o.isuse);
-          const messageText = lastMessageNode.querySelector("#message").innerText || "";
+          const messageText = lastMessageNode.querySelector('#message').innerText || '';
           if (filterList.some(o => messageText.includes(o.content))) return;
         }
 
-        const message = config.showStickers ? lastMessageNode.querySelector("#message").innerHTML : lastMessageNode.querySelector("#message").innerText;
-        const isPaidMessage = lastMessageNode.tagName.toLowerCase() === "yt-live-chat-paid-message-renderer";
-        CM.send({
-          text: message,
-          mode: 1,
-          color: isPaidMessage ? rgba2hex(getComputedStyle(lastMessageNode).getPropertyValue("--yt-live-chat-paid-message-primary-color")) : 0xffffff,
-          useHTML: config.showStickers
+        const message = config.showStickers ? lastMessageNode.querySelector('#message').innerHTML : lastMessageNode.querySelector('#message').innerText;
+        const isPaidMessage = lastMessageNode.tagName.toLowerCase() === 'yt-live-chat-paid-message-renderer';
+        const color = isPaidMessage ? getComputedStyle(lastMessageNode).getPropertyValue('--yt-live-chat-paid-message-primary-color') : 'white';
+        core.emit({
+          mode: 'rtl',
+          style: {
+            color
+          },
+          ...(config.showStickers ? {
+            render: () => {
+              const div = document.createElement('div');
+              div.innerHTML = message;
+              div.style.color = color;
+              return div;
+            }
+          } : {
+            text: message
+          })
         });
       });
     }
@@ -14493,34 +14486,33 @@
   }
 
   function buildControls() {
-    if (document.getElementById("ytb-danmaku-config")) return;
-    const div = document.createElement("div");
-    div.style.width = "auto";
-    div.id = "ytb-danmaku-config";
-    document.querySelector(".ytp-left-controls").append(div);
+    if (document.getElementById('ytb-danmaku-config')) return;
+    const div = document.createElement('div');
+    div.style.width = 'auto';
+    div.id = 'ytb-danmaku-config';
+    document.querySelector('.ytp-left-controls').append(div);
   }
 
   function subEvent() {
-    const video = document.querySelector("video");
-    video.addEventListener("pause", () => {
+    const video = document.querySelector('video');
+    video.addEventListener('pause', () => {
       if (!config.use) return;
       playing = false;
-      CM.stop();
+      core.hide();
     });
-    video.addEventListener("play", () => {
+    video.addEventListener('play', () => {
       if (!config.use) return;
       playing = true;
-      CM.clear();
-      CM.start();
+      core.show();
       rAFDanmaku();
     });
-    window.addEventListener("resize", () => {
-      CM.init(document.querySelector("#ytd-player"));
+    window.addEventListener('resize', () => {
+      core.resize();
     });
     if (videoObserver) videoObserver.disconnect();
     videoObserver = new MutationObserver(() => {
       setTimeout(() => {
-        CM.init(document.querySelector("#ytd-player"));
+        core.resize();
       }, 500);
     });
     videoObserver.observe(video, {
@@ -14528,82 +14520,29 @@
     });
   }
 
-  const muiTheme = createMuiTheme({
-    palette: {
-      secondary: {
-        main: "#f00"
-      }
-    },
-    overrides: {
-      MuiSwitch: {
-        thumb: {
-          backgroundColor: "white"
-        },
-        track: {
-          opacity: "1 !important"
-        }
-      }
-    }
-  });
-  const useStyles = makeStyles(theme => createStyles({
-    root: {
-      position: "relative"
-    },
-    controls: {
-      backgroundColor: "rgba(28,28,28,0.9)",
-      position: "absolute",
-      bottom: 40,
-      color: "white",
-      left: "50%",
-      transform: "translateX(-50%)",
-      zIndex: theme.zIndex.tooltip,
-      width: 300
-    },
+  const useStyles$1 = makeStyles(theme => createStyles({
     sliderRoot: {
-      display: "flex",
-      alignItems: "center"
+      display: 'flex',
+      alignItems: 'center'
     },
     slider: {
       margin: theme.spacing(0, 1, 0, 2),
       flex: 1
     },
-    tooltip: {
-      padding: theme.spacing(0.5, 1),
-      backgroundColor: "rgba(28,28,28,0.9)",
-      fontSize: 13,
-      borderRadius: 2,
-      fontWeight: 400
-    },
     listButton: {
-      "&:hover": {
-        backgroundColor: "rgba(255,255,255,.1)"
-      }
-    },
-    scrollPanelContainer: {
-      width: 300,
-      overflow: "hidden",
-      transition: theme.transitions.create("height")
-    },
-    scrollPanel: {
-      display: "flex",
-      transition: theme.transitions.create("transform"),
-      "&>*": {
-        width: 300,
-        flexShrink: 0
+      '&:hover': {
+        backgroundColor: 'rgba(255,255,255,.1)'
       }
     }
   }));
-  const Danmaku = mobxReact.observer(() => {
-    const [open, setOpen] = React$3.useState(false);
-    const [pageKey, setPageKey] = React$3.useState(0);
-    const classes = useStyles();
+
+  const BaseConfig = ({
+    switchPanel
+  }) => {
+    const classes = useStyles$1();
 
     const handleUse = () => {
       config.toggleDanmaku(!config.use);
-    };
-
-    const handleFilterUse = () => {
-      config.toggleFilterUse(!config.filterUse);
     };
 
     const handleShowSticker = () => {
@@ -14614,51 +14553,16 @@
       config.toggleShowSuperChat(!config.showSuperChat);
     };
 
-    React$3.useEffect(() => {
-      if (open === false) setPageKey(0);
-    }, [open]);
-    const height = pageKey === 0 ? 288 : 400;
-    return /*#__PURE__*/React__default['default'].createElement(ThemeProvider, {
-      theme: muiTheme
-    }, /*#__PURE__*/React__default['default'].createElement("span", {
-      className: classes.root
-    }, /*#__PURE__*/React__default['default'].createElement(Tooltip$1, {
-      title: "\u5F39\u5E55",
-      placement: "top",
-      classes: {
-        tooltip: classes.tooltip
-      }
-    }, /*#__PURE__*/React__default['default'].createElement("button", {
-      style: {
-        textAlign: "center"
-      },
-      onClick: () => setOpen(true),
-      className: "ytp-button"
-    }, "\u5F39\u5E55")), /*#__PURE__*/React__default['default'].createElement(Fade, {
-      in: open,
-      unmountOnExit: true
-    }, /*#__PURE__*/React__default['default'].createElement(Box, {
-      className: classes.controls
-    }, /*#__PURE__*/React__default['default'].createElement(ClickAwayListener, {
-      onClickAway: () => setOpen(false)
-    }, /*#__PURE__*/React__default['default'].createElement("div", {
-      className: classes.scrollPanelContainer,
-      style: {
-        height
-      }
-    }, /*#__PURE__*/React__default['default'].createElement("div", {
-      className: classes.scrollPanel,
-      style: {
-        transform: `translateX(-${pageKey * 300}px)`
-      }
-    }, /*#__PURE__*/React__default['default'].createElement(List$1, null, /*#__PURE__*/React__default['default'].createElement(ListItem$1, {
+    return /*#__PURE__*/React__default['default'].createElement(List$1, {
+      id: "k-base"
+    }, /*#__PURE__*/React__default['default'].createElement(ListItem$1, {
       button: true,
       className: classes.listButton,
       onClick: handleUse
     }, /*#__PURE__*/React__default['default'].createElement(ListItemText$1, {
       primary: "\u5F39\u5E55\u5F00\u5173",
       primaryTypographyProps: {
-        className: "ytp-menuitem-label",
+        className: 'ytp-menuitem-label',
         style: {
           fontWeight: 500
         }
@@ -14673,7 +14577,7 @@
     }, /*#__PURE__*/React__default['default'].createElement(ListItemText$1, {
       primary: "\u663E\u793A\u8D34\u7EB8",
       primaryTypographyProps: {
-        className: "ytp-menuitem-label",
+        className: 'ytp-menuitem-label',
         style: {
           fontWeight: 500
         }
@@ -14688,7 +14592,7 @@
     }, /*#__PURE__*/React__default['default'].createElement(ListItemText$1, {
       primary: "\u663E\u793ASuper Chat",
       primaryTypographyProps: {
-        className: "ytp-menuitem-label",
+        className: 'ytp-menuitem-label',
         style: {
           fontWeight: 500
         }
@@ -14697,6 +14601,25 @@
       checked: config.showSuperChat,
       onClick: handleShowSuperChat
     }))), /*#__PURE__*/React__default['default'].createElement(ListItem$1, {
+      className: classes.listButton
+    }, /*#__PURE__*/React__default['default'].createElement(ListItemText$1, {
+      primary: /*#__PURE__*/React__default['default'].createElement("div", {
+        className: classes.sliderRoot
+      }, /*#__PURE__*/React__default['default'].createElement("div", {
+        className: "ytp-menuitem-label"
+      }, "\u5B57\u4F53\u5927\u5C0F"), /*#__PURE__*/React__default['default'].createElement(Slider$1, {
+        color: "secondary",
+        max: 40,
+        step: 1,
+        min: 12,
+        value: config.fontSize,
+        valueLabelDisplay: "auto",
+        className: classes.slider,
+        onChange: (e, v) => {
+          config.changeDanmakuFontSize(v);
+        }
+      }))
+    })), /*#__PURE__*/React__default['default'].createElement(ListItem$1, {
       className: classes.listButton
     }, /*#__PURE__*/React__default['default'].createElement(ListItemText$1, {
       primary: /*#__PURE__*/React__default['default'].createElement("div", {
@@ -14737,18 +14660,178 @@
     })), /*#__PURE__*/React__default['default'].createElement(ListItem$1, {
       className: classes.listButton,
       button: true,
-      onClick: () => {
-        setPageKey(1);
-      }
+      onClick: () => switchPanel('filter')
     }, /*#__PURE__*/React__default['default'].createElement(ListItemText$1, {
       primary: "\u5F39\u5E55\u5C4F\u853D"
-    }), /*#__PURE__*/React__default['default'].createElement(ListItemSecondaryAction$1, null, /*#__PURE__*/React__default['default'].createElement(default_1$1, null)))), /*#__PURE__*/React__default['default'].createElement("div", null, /*#__PURE__*/React__default['default'].createElement(List$1, null, /*#__PURE__*/React__default['default'].createElement(ListItem$1, {
+    }), /*#__PURE__*/React__default['default'].createElement(ListItemSecondaryAction$1, null, /*#__PURE__*/React__default['default'].createElement(default_1$2, null))));
+  };
+
+  var BaseConfig$1 = mobxReact.observer(BaseConfig);
+
+  var ArrowBackIos = {};
+
+  var _interopRequireDefault$1 = interopRequireDefault.exports;
+
+  var _interopRequireWildcard$1 = interopRequireWildcard.exports;
+
+  Object.defineProperty(ArrowBackIos, "__esModule", {
+    value: true
+  });
+  var default_1$1 = ArrowBackIos.default = void 0;
+
+  var React$1 = _interopRequireWildcard$1(React__default['default']);
+
+  var _createSvgIcon$1 = _interopRequireDefault$1(createSvgIcon);
+
+  var _default$1 = (0, _createSvgIcon$1.default)( /*#__PURE__*/React$1.createElement("path", {
+    d: "M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+  }), 'ArrowBackIos');
+
+  default_1$1 = ArrowBackIos.default = _default$1;
+
+  var Delete = {};
+
+  var _interopRequireDefault = interopRequireDefault.exports;
+
+  var _interopRequireWildcard = interopRequireWildcard.exports;
+
+  Object.defineProperty(Delete, "__esModule", {
+    value: true
+  });
+  var default_1 = Delete.default = void 0;
+
+  var React = _interopRequireWildcard(React__default['default']);
+
+  var _createSvgIcon = _interopRequireDefault(createSvgIcon);
+
+  var _default = (0, _createSvgIcon.default)( /*#__PURE__*/React.createElement("path", {
+    d: "M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+  }), 'Delete');
+
+  default_1 = Delete.default = _default;
+
+  const useFilterStyles = makeStyles(theme => createStyles({
+    root: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      height: 350
+    },
+    filterRoot: {
+      flex: 1,
+      overflow: 'hidden',
+      textAlign: 'left',
+      padding: theme.spacing(1, 2),
+      boxSizing: 'border-box',
+      display: 'flex',
+      flexDirection: 'column'
+    },
+    inputContainer: {
+      display: 'flex'
+    },
+    input: {
+      padding: theme.spacing(0.25, 1),
+      border: '1px solid rgba(255,255,255,.4)',
+      borderRadius: 2,
+      flex: 1,
+      '&:focus': {
+        outline: 0
+      }
+    },
+    addbtn: {
+      border: '1px solid rgba(255,255,255,.4)',
+      borderRadius: 2,
+      marginLeft: 8,
+      backgroundColor: 'transparent',
+      padding: theme.spacing(0.25, 1),
+      color: 'white'
+    },
+    table: {
+      fontSize: 12,
+      marginTop: theme.spacing(1),
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden'
+    },
+    thead: {
+      marginBottom: theme.spacing(0.5)
+    },
+    row: {
+      display: 'flex',
+      padding: theme.spacing(0.25, 0)
+    },
+    op: {
+      flex: 1,
+      display: 'flex',
+      justifyContent: 'space-between',
+      '& > :last-child': {
+        marginLeft: theme.spacing(1)
+      },
+      '& > div': {
+        cursor: 'pointer'
+      }
+    },
+    delete: {
+      marginRight: 4
+    },
+    content: {
+      width: '100%',
+      maxWidth: 200,
+      paddingRight: theme.spacing(1),
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap'
+    },
+    listContainer: {
+      flex: 1,
+      overflow: 'hidden'
+    },
+    list: {
+      height: '100%',
+      overflow: 'auto',
+      '&::-webkit-scrollbar': {
+        width: 0
+      }
+    },
+    sliderRoot: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    slider: {
+      margin: theme.spacing(0, 1, 0, 2),
+      flex: 1
+    },
+    listButton: {
+      '&:hover': {
+        backgroundColor: 'rgba(255,255,255,.1)'
+      }
+    }
+  }));
+
+  const FilterDanmaku = ({
+    switchPanel
+  }) => {
+    const classes = useFilterStyles();
+    const [state, setState] = React$3.useState('');
+
+    const handleAdd = () => {
+      config.addFilter(state);
+      setState('');
+    };
+
+    const handleFilterUse = () => {
+      config.toggleFilterUse(!config.filterUse);
+    };
+
+    return /*#__PURE__*/React__default['default'].createElement("div", {
+      id: "k-filter",
+      className: classes.root
+    }, /*#__PURE__*/React__default['default'].createElement(List$1, null, /*#__PURE__*/React__default['default'].createElement(ListItem$1, {
       className: classes.listButton,
       button: true,
-      onClick: () => {
-        setPageKey(0);
-      }
-    }, /*#__PURE__*/React__default['default'].createElement(default_1$2, {
+      onClick: () => switchPanel('base', true)
+    }, /*#__PURE__*/React__default['default'].createElement(default_1$1, {
       color: "inherit"
     }), /*#__PURE__*/React__default['default'].createElement(ListItemText$1, {
       primary: "\u5F39\u5E55\u5C4F\u853D"
@@ -14757,89 +14840,13 @@
       onClick: handleFilterUse
     }))), /*#__PURE__*/React__default['default'].createElement(Divider$1, {
       style: {
-        backgroundColor: "#444"
+        backgroundColor: '#444'
       }
     })), /*#__PURE__*/React__default['default'].createElement(Fade, {
       in: config.filterUse,
       unmountOnExit: true
-    }, /*#__PURE__*/React__default['default'].createElement(FilterDanmaku, null))))))))));
-  });
-  const useFilterStyles = makeStyles(theme => createStyles({
-    root: {
-      textAlign: "left",
-      padding: theme.spacing(1, 2)
-    },
-    inputContainer: {
-      display: "flex"
-    },
-    input: {
-      border: "1px solid rgba(255,255,255,.4)",
-      borderRadius: 2,
-      flex: 1
-    },
-    addbtn: {
-      border: "1px solid rgba(255,255,255,.4)",
-      borderRadius: 2,
-      marginLeft: 8,
-      backgroundColor: "transparent",
-      padding: theme.spacing(0, 1),
-      color: "white"
-    },
-    table: {
-      fontSize: 12,
-      marginTop: theme.spacing(1)
-    },
-    thead: {
-      marginBottom: theme.spacing(0.5)
-    },
-    row: {
-      display: "flex",
-      padding: theme.spacing(0.25, 0)
-    },
-    op: {
-      flex: 1,
-      display: "flex",
-      justifyContent: "space-between",
-      "& > :last-child": {
-        marginLeft: theme.spacing(1)
-      },
-      "& > div": {
-        cursor: "pointer"
-      }
-    },
-    delete: {
-      marginRight: 4
-    },
-    content: {
-      width: "100%",
-      maxWidth: 200,
-      paddingRight: theme.spacing(1),
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      whiteSpace: "nowrap"
-    },
-    list: {
-      overflow: "auto",
-      height: 260,
-      "&::-webkit-scrollbar": {
-        width: 0
-      }
-    }
-  }));
-  const FilterDanmaku = mobxReact.observer(({
-    style
-  }) => {
-    const classes = useFilterStyles();
-    const [state, setState] = React$3.useState("");
-
-    const handleAdd = () => {
-      config.addFilter(state);
-      setState("");
-    };
-
-    return /*#__PURE__*/React__default['default'].createElement("div", {
-      className: classes.root,
-      style: style
+    }, /*#__PURE__*/React__default['default'].createElement("div", {
+      className: classes.filterRoot
     }, /*#__PURE__*/React__default['default'].createElement("div", {
       className: classes.inputContainer
     }, /*#__PURE__*/React__default['default'].createElement("input", {
@@ -14848,7 +14855,7 @@
       value: state,
       onChange: e => setState(e.target.value),
       onKeyPress: e => {
-        if (e.key === "Enter") {
+        if (e.key === 'Enter') {
           handleAdd();
         }
       }
@@ -14864,6 +14871,8 @@
     }, "\u5185\u5BB9( ", config.filterList.length, " )"), /*#__PURE__*/React__default['default'].createElement("div", {
       className: classes.op
     }, /*#__PURE__*/React__default['default'].createElement("div", null, "\u72B6\u6001"), /*#__PURE__*/React__default['default'].createElement("div", null, "\u64CD\u4F5C"))), /*#__PURE__*/React__default['default'].createElement("div", {
+      className: classes.listContainer
+    }, /*#__PURE__*/React__default['default'].createElement("div", {
       className: classes.list
     }, config.filterList.map(o => /*#__PURE__*/React__default['default'].createElement("div", {
       className: classes.row,
@@ -14874,7 +14883,7 @@
       className: classes.op
     }, /*#__PURE__*/React__default['default'].createElement("div", {
       onClick: () => config.changeFilterUse(o.id)
-    }, o.isuse ? "启用" : "禁用"), /*#__PURE__*/React__default['default'].createElement("div", {
+    }, o.isuse ? '启用' : '禁用'), /*#__PURE__*/React__default['default'].createElement("div", {
       className: classes.delete,
       onClick: () => {
         config.deleteFilter(o.id);
@@ -14883,14 +14892,150 @@
       style: {
         fontSize: 16
       }
-    }))))))));
-  });
+    })))))))))));
+  };
 
-  window.addEventListener("load", () => {
+  var FilterDanmaku$1 = mobxReact.observer(FilterDanmaku);
+
+  const muiTheme = createMuiTheme({
+    palette: {
+      secondary: {
+        main: '#f00'
+      }
+    },
+    overrides: {
+      MuiSwitch: {
+        thumb: {
+          backgroundColor: 'white'
+        },
+        track: {
+          opacity: '1 !important'
+        }
+      }
+    }
+  });
+  const useStyles = makeStyles(theme => createStyles({
+    root: {
+      position: 'relative'
+    },
+    controls: {
+      backgroundColor: 'rgba(28,28,28,0.9)',
+      position: 'absolute',
+      bottom: 40,
+      color: 'white',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      zIndex: theme.zIndex.tooltip,
+      width: 300
+    },
+    tooltip: {
+      padding: theme.spacing(0.5, 1),
+      backgroundColor: 'rgba(28,28,28,0.9)',
+      fontSize: 13,
+      borderRadius: 2,
+      fontWeight: 400
+    },
+    container: {
+      width: 300,
+      '&>div': {
+        width: 300,
+        display: 'flex',
+        overflow: 'hidden',
+        transition: theme.transitions.create(['height']),
+        '&>*': {
+          flexShrink: 0,
+          width: 300
+        }
+      }
+    }
+  }));
+
+  const Danmaku = () => {
+    const [open, setOpen] = React$3.useState(false);
+    const classes = useStyles();
+    const containerRef = React$3.useRef();
+    const theme = useTheme();
+    React$3.useEffect(() => {
+      if (open) {
+        Array.from(containerRef.current.children).forEach((o, i) => o.hidden = i !== 0);
+      }
+    }, [open]);
+    const switchPanel = React$3.useCallback((key, isBack) => {
+      const target = document.getElementById(`k-${key}`);
+      const current = Array.from(containerRef.current.children).find(o => !o.hidden);
+      const currentSize = current.getBoundingClientRect();
+      containerRef.current.style.height = `${currentSize.height}px`;
+
+      const restore = e => {
+        if (e.target !== containerRef.current && !['height'].includes(e.propertyName)) return;
+        containerRef.current.style.height = '';
+        [current, target].forEach(o => {
+          o.style.transform = '';
+          o.style.transition = '';
+        });
+        current.hidden = true;
+        containerRef.current.removeEventListener('transitionend', restore);
+      };
+
+      containerRef.current.addEventListener('transitionend', restore);
+      const size = getPanelSize(target);
+      containerRef.current.style.height = `${size.height}px`;
+      target.hidden = false;
+      Array.from(containerRef.current.children).forEach(o => {
+        o.style.transform = `translateX(${isBack ? '-300' : '0'}px)`;
+        requestAnimationFrame(() => {
+          o.style.transform = `translateX(${isBack ? '0' : '-300'}px)`;
+          o.style.transition = theme.transitions.create(['transform']);
+        });
+      });
+    }, []);
+    return /*#__PURE__*/React__default['default'].createElement(ThemeProvider, {
+      theme: muiTheme
+    }, /*#__PURE__*/React__default['default'].createElement("style", {
+      jsx: true
+    }, `
+        [hidden] {
+          display: none !important;
+        }
+      `), /*#__PURE__*/React__default['default'].createElement("span", {
+      className: classes.root
+    }, /*#__PURE__*/React__default['default'].createElement(Tooltip$1, {
+      title: "\u5F39\u5E55",
+      placement: "top",
+      classes: {
+        tooltip: classes.tooltip
+      }
+    }, /*#__PURE__*/React__default['default'].createElement("button", {
+      style: {
+        textAlign: 'center'
+      },
+      onClick: () => setOpen(true),
+      className: "ytp-button"
+    }, "\u5F39\u5E55")), /*#__PURE__*/React__default['default'].createElement(Fade, {
+      in: open,
+      unmountOnExit: true
+    }, /*#__PURE__*/React__default['default'].createElement(Box, {
+      className: classes.controls
+    }, /*#__PURE__*/React__default['default'].createElement(ClickAwayListener, {
+      onClickAway: () => setOpen(false)
+    }, /*#__PURE__*/React__default['default'].createElement("div", {
+      className: classes.container
+    }, /*#__PURE__*/React__default['default'].createElement("div", {
+      ref: containerRef
+    }, /*#__PURE__*/React__default['default'].createElement(BaseConfig$1, {
+      switchPanel: switchPanel
+    }), /*#__PURE__*/React__default['default'].createElement(FilterDanmaku$1, {
+      switchPanel: switchPanel
+    }))))))));
+  };
+
+  var Danmaku$1 = mobxReact.observer(Danmaku);
+
+  window.addEventListener('load', () => {
+    console.log('[ytb-danmaku] init');
     init(() => {
-      ReactDOM__default['default'].render( /*#__PURE__*/React__default['default'].createElement(Danmaku, null), document.getElementById("ytb-danmaku-config"));
+      ReactDOM__default['default'].render( /*#__PURE__*/React__default['default'].createElement(Danmaku$1, null), document.getElementById('ytb-danmaku-config'));
     });
   });
-  console.log("[ytb-danmaku] init");
 
-}(React, ReactDOM, mobxReact, mobx));
+}(React, ReactDOM, mobxReact, mobx, Danmaku));
