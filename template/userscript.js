@@ -3,6 +3,7 @@ export function genUserScriptInfo(pkg) {
 // @name         youtube-danmaku
 // @namespace    https://github.com/IronKinoko/ytb-danmaku
 // @version      ${pkg.version}
+// @icon         https://www.youtube.com/favicon.ico
 // @license      MIT
 // @description  Youtube livechat danmaku
 // @author       Ironkinoko
