@@ -1,7 +1,5 @@
 # ytb-danmaku
 
-依附于油猴 弹幕核心逻辑由[jabbany/CommentCoreLibrary](https://github.com/jabbany/CommentCoreLibrary)提供
-
 ## 特性
 
 - 基础弹幕功能，可自定义开关、弹幕速度、透明度、贴纸渲染、superchat渲染
@@ -16,6 +14,8 @@
 [Install/点此安装](https://greasyfork.org/scripts/409684-youtube-danmaku)
 
 ## ChangeLog/更新日志
+
+v2.4.4 feat: 增加**字体大小**控制，替换弹幕组件
 
 v2.4.1 feat: 增加渲染SC控制开关
 

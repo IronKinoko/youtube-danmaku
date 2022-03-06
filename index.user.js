@@ -2,6 +2,7 @@
 // @name         youtube-danmaku
 // @namespace    https://github.com/IronKinoko/ytb-danmaku
 // @version      2.4.4
+// @icon         https://www.youtube.com/favicon.ico
 // @license      MIT
 // @description  Youtube livechat danmaku
 // @author       Ironkinoko
