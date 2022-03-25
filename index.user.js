@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         youtube-danmaku
 // @namespace    https://github.com/IronKinoko/ytb-danmaku
-// @version      2.4.4
+// @version      2.4.5
 // @icon         https://www.youtube.com/favicon.ico
 // @license      MIT
 // @description  Youtube livechat danmaku
@@ -14,7 +14,7 @@
 // @require      https://cdn.jsdelivr.net/npm/mobx@6.3.2/dist/mobx.umd.production.min.js
 // @require      https://cdn.jsdelivr.net/npm/mobx-react-lite@3.2.0/dist/mobxreactlite.umd.production.min.js
 // @require      https://cdn.jsdelivr.net/npm/mobx-react@7.2.0/dist/mobxreact.umd.production.min.js
-// @require      https://cdn.jsdelivr.net/npm/@ironkinoko/danmaku@1.1.6/dist/danmaku.min.js
+// @require      https://cdn.jsdelivr.net/npm/@ironkinoko/danmaku@1.2.6/dist/danmaku.min.js
 // ==/UserScript==
 (function (React$3, ReactDOM, mobxReact, mobx, Danmaku$2) {
   'use strict';
@@ -73,7 +73,7 @@
     }
   }
 
-  var css$2 = ".danmaku-stage {\n  border: 0;\n  bottom: 0;\n  display: block;\n  left: 0;\n  margin: 0;\n  overflow: hidden;\n  position: absolute !important;\n  right: 0;\n  top: 0;\n  touch-callout: none;\n  -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  pointer-events: none;\n  z-index: 20;\n}\n\n.danmaku-stage > div {\n  pointer-events: none;\n  color: #fff;\n  font-family: SimHei, SimSun, Heiti, \"MS Mincho\", Meiryo, \"Microsoft YaHei\", monospace;\n  font-size: var(--danmaku-font-size, 24px);\n  letter-spacing: 0;\n  line-height: 100%;\n  margin: 0;\n  padding: 3px 0 0 0;\n  position: absolute;\n  text-decoration: none;\n  text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;\n  -webkit-text-size-adjust: none;\n  -ms-text-size-adjust: none;\n  text-size-adjust: none;\n  -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  -webkit-transform-origin: 0 0;\n  -ms-transform-origin: 0 0;\n  transform-origin: 0 0;\n  white-space: pre;\n  word-break: keep-all;\n}\n.danmaku-stage > div img {\n  width: 24px;\n  height: 24px;\n}";
+  var css$2 = ".danmaku-stage {\n  border: 0;\n  bottom: 0;\n  display: block;\n  left: 0;\n  margin: 0;\n  overflow: hidden;\n  position: absolute !important;\n  right: 0;\n  top: 0;\n  -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  pointer-events: none;\n  z-index: 20;\n}\n\n.danmaku-stage > div {\n  --size: var(--danmaku-font-size, 24px);\n  pointer-events: none;\n  color: #fff;\n  font-family: SimHei, SimSun, Heiti, \"MS Mincho\", Meiryo, \"Microsoft YaHei\", monospace;\n  font-size: var(--size);\n  letter-spacing: 0;\n  line-height: 100%;\n  margin: 0;\n  padding: 3px 0 0 0;\n  position: absolute;\n  text-decoration: none;\n  text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;\n  -webkit-text-size-adjust: none;\n  -ms-text-size-adjust: none;\n  text-size-adjust: none;\n  -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n  -webkit-transform-origin: 0 0;\n  -ms-transform-origin: 0 0;\n  transform-origin: 0 0;\n  white-space: pre;\n  word-break: keep-all;\n}\n.danmaku-stage > div img {\n  width: var(--size);\n  height: var(--size);\n}";
   n$1(css$2,{});
 
   var common = {
