@@ -24,7 +24,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@ironkinoko/danmaku": "^1.1.6",
+    "@ironkinoko/danmaku": "^1.2.6",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "lodash.merge": "^4.6.2",

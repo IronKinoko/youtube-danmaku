@@ -8,7 +8,6 @@
   position: absolute !important;
   right: 0;
   top: 0;
-  touch-callout: none;
   -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
   transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
   -webkit-user-select: none;
@@ -19,11 +18,12 @@
   z-index: 20;
 }
 .danmaku-stage > div {
+  --size: var(--danmaku-font-size, 24px);
   pointer-events: none;
   color: #fff;
   font-family: SimHei, SimSun, Heiti, 'MS Mincho', Meiryo, 'Microsoft YaHei',
     monospace;
-  font-size: var(--danmaku-font-size, 24px);
+  font-size: var(--size);
   letter-spacing: 0;
   line-height: 100%;
   margin: 0;
@@ -42,7 +42,7 @@
   white-space: pre;
   word-break: keep-all;
   img {
-    width: 24px;
-    height: 24px;
+    width: var(--size);
+    height: var(--size);
   }
 }

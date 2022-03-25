@@ -972,10 +972,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@ironkinoko/danmaku@^1.1.6":
-  version "1.1.6"
-  resolved "https://registry.npmmirror.com/@ironkinoko/danmaku/-/danmaku-1.1.6.tgz#7d899549cf609c10c3ce8b3b51644cbc48372d29"
-  integrity sha512-rkpFx2q2oOAPjtlypVAlkBXiD907n1DUp5fur/Dluu7lsORQgXnLNE9X81jRavNCgpYSXbQNivrO9r5I1xdxqw==
+"@ironkinoko/danmaku@^1.2.6":
+  version "1.2.6"
+  resolved "https://registry.npmmirror.com/@ironkinoko/danmaku/-/danmaku-1.2.6.tgz#9c6c7fdc579d625ada9a7efcddf0263448252ecb"
+  integrity sha512-sOC4V80PbYCb4w+jSvSBYCODHp49P3WPKCWPycwrI5bF25pcmAoz7uQ2PfnEWd1dOlN9kKiqgx9dgSQvIMGiRg==
 
 "@material-ui/core@^4.11.4":
   version "4.11.4"
