@@ -8,7 +8,8 @@
     "dev:youtube": "rollup -c -w --environment NODE_ENV:production",
     "build": "rollup -c --environment NODE_ENV:production",
     "lint": "eslint --fix --ext js .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postversion": "git push && git push --tags"
   },
   "author": "IronKinoko",
   "homepage": "https://greasyfork.org/scripts/409684-youtube-danmaku",
