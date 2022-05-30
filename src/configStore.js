@@ -189,7 +189,7 @@ function inject(cb) {
     const player = document.getElementById('movie_player')
     if (!player) throw new Error('not find player')
     document
-      .querySelector('div.ytp-left-controls')
+      .querySelector('ytd-watch-flexy .ytp-left-controls')
       .setAttribute('style', 'overflow: unset;')
     core?.destroy()
     core = new Danmaku({
@@ -284,7 +284,7 @@ function buildControls() {
   const div = document.createElement('div')
   div.style.width = 'auto'
   div.id = 'ytb-danmaku-config'
-  document.querySelector('.ytp-left-controls').append(div)
+  document.querySelector('ytd-watch-flexy .ytp-left-controls').append(div)
 }
 
 function subEvent() {
