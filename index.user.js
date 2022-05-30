@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         youtube-danmaku
 // @namespace    https://github.com/IronKinoko/ytb-danmaku
-// @version      2.4.6
+// @version      2.4.7
 // @icon         https://www.youtube.com/favicon.ico
 // @license      MIT
 // @description  Youtube livechat danmaku
@@ -9,12 +9,12 @@
 // @match        https://www.youtube.com/*
 // @exclude      https://www.youtube.com/live_chat*
 // @grant        none
-// @require      https://cdn.jsdelivr.net/npm/react@16.14.0/umd/react.production.min.js
-// @require      https://cdn.jsdelivr.net/npm/react-dom@16.14.0/umd/react-dom.production.min.js
-// @require      https://cdn.jsdelivr.net/npm/mobx@6.3.2/dist/mobx.umd.production.min.js
-// @require      https://cdn.jsdelivr.net/npm/mobx-react-lite@3.2.0/dist/mobxreactlite.umd.production.min.js
-// @require      https://cdn.jsdelivr.net/npm/mobx-react@7.2.0/dist/mobxreact.umd.production.min.js
-// @require      https://cdn.jsdelivr.net/npm/@ironkinoko/danmaku@1.2.6/dist/danmaku.min.js
+// @require      https://unpkg.com/react@16.14.0/umd/react.production.min.js
+// @require      https://unpkg.com/react-dom@16.14.0/umd/react-dom.production.min.js
+// @require      https://unpkg.com/mobx@6.3.2/dist/mobx.umd.production.min.js
+// @require      https://unpkg.com/mobx-react-lite@3.2.0/dist/mobxreactlite.umd.production.min.js
+// @require      https://unpkg.com/mobx-react@7.2.0/dist/mobxreact.umd.production.min.js
+// @require      https://unpkg.com/@ironkinoko/danmaku@1.2.6/dist/danmaku.umd.js
 // ==/UserScript==
 (function (React$3, ReactDOM, mobxReact, mobx, Danmaku$2) {
   'use strict';
@@ -14413,7 +14413,7 @@
       console.trace('ytb-danmaku-inited');
       const player = document.getElementById('movie_player');
       if (!player) throw new Error('not find player');
-      document.querySelector('div.ytp-left-controls').setAttribute('style', 'overflow: unset;');
+      document.querySelector('ytd-watch-flexy .ytp-left-controls').setAttribute('style', 'overflow: unset;');
       (_core = core) === null || _core === void 0 ? void 0 : _core.destroy();
       core = new Danmaku__default['default']({
         container: player
@@ -14491,7 +14491,7 @@
     const div = document.createElement('div');
     div.style.width = 'auto';
     div.id = 'ytb-danmaku-config';
-    document.querySelector('.ytp-left-controls').append(div);
+    document.querySelector('ytd-watch-flexy .ytp-left-controls').append(div);
   }
 
   function subEvent() {
