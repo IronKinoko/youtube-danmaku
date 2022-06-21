@@ -1,0 +1,18 @@
+{
+  "danmaku": "弹幕",
+  "showDanmaku": "显示弹幕",
+  "showEmoji": "显示 emoji",
+  "showSuperChat": "显示 Super Chat",
+  "fontSize": "字体大小",
+  "danmakuSpeed": "弹幕速度",
+  "opacity": "不透明度",
+  "filter": {
+    "label": "弹幕过滤",
+    "enterContent": "输入过滤内容...",
+    "content": "内容",
+    "operation": "操作",
+    "on": "启用",
+    "off": "禁用",
+    "add": "添加"
+  }
+}

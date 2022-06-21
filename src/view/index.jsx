@@ -10,8 +10,8 @@ import {
   useTheme,
 } from '@material-ui/core'
 import { observer } from 'mobx-react'
-import React, { useState, useRef, useEffect } from 'react'
-import { useCallback } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { getPanelSize } from '../utils'
 import BaseConfig from './BaseConfig'
 import FilterDanmaku from './FilterDanmaku'
@@ -73,6 +73,8 @@ const Danmaku = () => {
   const classes = useStyles()
   const containerRef = useRef()
   const theme = useTheme()
+  const [t] = useTranslation()
+
   useEffect(() => {
     if (open) {
       Array.from(containerRef.current.children).forEach(
@@ -130,16 +132,16 @@ const Danmaku = () => {
       `}</style>
       <span className={classes.root}>
         <Tooltip
-          title="弹幕"
+          title={t('danmaku')}
           placement="top"
           classes={{ tooltip: classes.tooltip }}
         >
           <button
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'center', width: 'auto' }}
             onClick={() => setOpen(true)}
             className="ytp-button"
           >
-            弹幕
+            {t('danmaku')}
           </button>
         </Tooltip>
 

@@ -11,10 +11,16 @@ import {
 import ArrowForwardIos from '@material-ui/icons/ArrowForwardIos'
 import { observer } from 'mobx-react'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { config } from '../configStore'
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    root: {
+      '& .ytp-menuitem-label': {
+        width: 60,
+      },
+    },
     sliderRoot: {
       display: 'flex',
       alignItems: 'center',
@@ -34,6 +40,7 @@ const useStyles = makeStyles((theme) =>
 
 const BaseConfig = ({ switchPanel }) => {
   const classes = useStyles()
+  const [t] = useTranslation()
 
   const handleUse = () => {
     config.toggleDanmaku(!config.use)
@@ -47,10 +54,10 @@ const BaseConfig = ({ switchPanel }) => {
     config.toggleShowSuperChat(!config.showSuperChat)
   }
   return (
-    <List id="k-base">
+    <List id="k-base" className={classes.root}>
       <ListItem button className={classes.listButton} onClick={handleUse}>
         <ListItemText
-          primary="弹幕开关"
+          primary={t('showDanmaku')}
           primaryTypographyProps={{
             className: 'ytp-menuitem-label',
             style: { fontWeight: 500 },
@@ -66,7 +73,7 @@ const BaseConfig = ({ switchPanel }) => {
         onClick={handleShowSticker}
       >
         <ListItemText
-          primary="显示贴纸"
+          primary={t('showEmoji')}
           primaryTypographyProps={{
             className: 'ytp-menuitem-label',
             style: { fontWeight: 500 },
@@ -82,7 +89,7 @@ const BaseConfig = ({ switchPanel }) => {
         onClick={handleShowSuperChat}
       >
         <ListItemText
-          primary="显示Super Chat"
+          primary={t('showSuperChat')}
           primaryTypographyProps={{
             className: 'ytp-menuitem-label',
             style: { fontWeight: 500 },
@@ -99,7 +106,7 @@ const BaseConfig = ({ switchPanel }) => {
         <ListItemText
           primary={
             <div className={classes.sliderRoot}>
-              <div className="ytp-menuitem-label">字体大小</div>
+              <div className="ytp-menuitem-label">{t('fontSize')}</div>
               <Slider
                 color="secondary"
                 max={40}
@@ -120,7 +127,7 @@ const BaseConfig = ({ switchPanel }) => {
         <ListItemText
           primary={
             <div className={classes.sliderRoot}>
-              <div className="ytp-menuitem-label">弹幕速度</div>
+              <div className="ytp-menuitem-label">{t('danmakuSpeed')}</div>
               <Slider
                 color="secondary"
                 max={2}
@@ -141,7 +148,7 @@ const BaseConfig = ({ switchPanel }) => {
         <ListItemText
           primary={
             <div className={classes.sliderRoot}>
-              <div className="ytp-menuitem-label">不透明度</div>
+              <div className="ytp-menuitem-label">{t('opacity')}</div>
               <Slider
                 color="secondary"
                 max={1}
@@ -164,7 +171,7 @@ const BaseConfig = ({ switchPanel }) => {
         button
         onClick={() => switchPanel('filter')}
       >
-        <ListItemText primary="弹幕屏蔽" />
+        <ListItemText primary={t('filter.label')} />
         <ListItemSecondaryAction>
           <ArrowForwardIos />
         </ListItemSecondaryAction>

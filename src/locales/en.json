@@ -1,0 +1,18 @@
+{
+  "danmaku": "Danmaku",
+  "showDanmaku": "Show Danmaku",
+  "showEmoji": "Show emoji",
+  "showSuperChat": "Show Super Chat",
+  "fontSize": "Font size",
+  "danmakuSpeed": "Speed",
+  "opacity": "Opacity",
+  "filter": {
+    "label": "Danmaku filter",
+    "enterContent": "Enter filter content...",
+    "content": "Content",
+    "operation": "Operation",
+    "on": "ON",
+    "off": "OFF",
+    "add": "ADD"
+  }
+}

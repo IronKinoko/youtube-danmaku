@@ -13,6 +13,7 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { observer } from 'mobx-react'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { config } from '../configStore'
 
 const useFilterStyles = makeStyles((theme) =>
@@ -44,7 +45,7 @@ const useFilterStyles = makeStyles((theme) =>
         outline: 0,
       },
     },
-    addbtn: {
+    addBtn: {
       border: '1px solid rgba(255,255,255,.4)',
       borderRadius: 2,
       marginLeft: 8,
@@ -52,62 +53,28 @@ const useFilterStyles = makeStyles((theme) =>
       padding: theme.spacing(0.25, 1),
       color: 'white',
     },
-    table: {
-      fontSize: 12,
-      marginTop: theme.spacing(1),
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'hidden',
-    },
-    thead: {
-      marginBottom: theme.spacing(0.5),
-    },
-    row: {
-      display: 'flex',
-      padding: theme.spacing(0.25, 0),
-    },
-    op: {
-      flex: 1,
-      display: 'flex',
-      justifyContent: 'space-between',
-      '& > :last-child': {
-        marginLeft: theme.spacing(1),
-      },
-      '& > div': {
-        cursor: 'pointer',
-      },
-    },
-    delete: {
-      marginRight: 4,
-    },
-    content: {
-      width: '100%',
-      maxWidth: 200,
-      paddingRight: theme.spacing(1),
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-    },
-    listContainer: { flex: 1, overflow: 'hidden' },
-    list: {
-      height: '100%',
-      overflow: 'auto',
-      '&::-webkit-scrollbar': {
-        width: 0,
-      },
-    },
-    sliderRoot: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    slider: {
-      margin: theme.spacing(0, 1, 0, 2),
-      flex: 1,
-    },
     listButton: {
       '&:hover': {
         backgroundColor: 'rgba(255,255,255,.1)',
+      },
+    },
+    cell: {
+      padding: theme.spacing(0.25, 0),
+      lineHeight: 1.2,
+      '& + &': {
+        paddingLeft: theme.spacing(1),
+      },
+    },
+    contentCell: {
+      width: 180,
+      wordBreak: 'break-all',
+    },
+    op: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      '& > * + *': {
+        marginLeft: theme.spacing(1),
       },
     },
   })
@@ -116,6 +83,7 @@ const useFilterStyles = makeStyles((theme) =>
 const FilterDanmaku = ({ switchPanel }) => {
   const classes = useFilterStyles()
   const [state, setState] = useState('')
+  const [t] = useTranslation()
 
   const handleAdd = () => {
     config.addFilter(state)
@@ -135,7 +103,7 @@ const FilterDanmaku = ({ switchPanel }) => {
           onClick={() => switchPanel('base', true)}
         >
           <ArrowBackIos color="inherit" />
-          <ListItemText primary="弹幕屏蔽" />
+          <ListItemText primary={t('filter.label')} />
           <ListItemSecondaryAction>
             <Switch checked={config.filterUse} onClick={handleFilterUse} />
           </ListItemSecondaryAction>
@@ -146,53 +114,65 @@ const FilterDanmaku = ({ switchPanel }) => {
         <div className={classes.filterRoot}>
           <div className={classes.inputContainer}>
             <input
-              placeholder="屏蔽内容..."
+              placeholder={t('filter.enterContent')}
               className={classes.input}
               value={state}
-              onChange={(e) => setState(e.target.value)}
-              onKeyPress={(e) => {
+              onChange={(e) => {
+                setState(e.target.value)
+              }}
+              onKeyDownCapture={(e) => {
                 if (e.key === 'Enter') {
                   handleAdd()
                 }
               }}
             />
-            <button className={classes.addbtn} onClick={handleAdd}>
-              添加
+            <button className={classes.addBtn} onClick={handleAdd}>
+              {t('filter.add')}
             </button>
           </div>
-          <div className={classes.table}>
-            <div className={`${classes.row} ${classes.thead}`}>
-              <div className={classes.content}>
-                内容( {config.filterList.length} )
-              </div>
-              <div className={classes.op}>
-                <div>状态</div>
-                <div>操作</div>
-              </div>
-            </div>
-            <div className={classes.listContainer}>
-              <div className={classes.list}>
-                {config.filterList.map((o) => (
-                  <div className={classes.row} key={o.id}>
-                    <div className={classes.content}>{o.content}</div>
+
+          <table>
+            <thead>
+              <tr>
+                <th className={classes.cell}>
+                  {t('filter.content')}({config.filterList.length})
+                </th>
+                <th className={classes.cell} align="right">
+                  {t('filter.operation')}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {config.filterList.map((o) => (
+                <tr key={o.id}>
+                  <td className={`${classes.contentCell} ${classes.cell}`}>
+                    {o.content}
+                  </td>
+                  <td className={classes.cell} align="right">
                     <div className={classes.op}>
-                      <div onClick={() => config.changeFilterUse(o.id)}>
-                        {o.isuse ? '启用' : '禁用'}
-                      </div>
-                      <div
-                        className={classes.delete}
+                      <span
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => config.changeFilterUse(o.id)}
+                      >
+                        {o.isuse ? t('filter.on') : t('filter.off')}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: '1em',
+                          cursor: 'pointer',
+                        }}
                         onClick={() => {
                           config.deleteFilter(o.id)
                         }}
                       >
-                        <DeleteIcon style={{ fontSize: 16 }} />
-                      </div>
+                        <DeleteIcon />
+                      </span>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </Fade>
     </div>

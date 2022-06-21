@@ -6,7 +6,7 @@ import { genUserScriptInfo } from './template/userscript'
 import pkg from './package.json'
 import replace from '@rollup/plugin-replace'
 import commonjs from '@rollup/plugin-commonjs'
-
+import json from '@rollup/plugin-json'
 const globals = {
   mobx: 'mobx',
   'mobx-react': 'mobxReact',
@@ -27,6 +27,7 @@ const config = {
   },
   external: Object.keys(globals),
   plugins: [
+    json(),
     babel({ babelHelpers: 'bundled' }),
     styles(),
     nodeResolve({

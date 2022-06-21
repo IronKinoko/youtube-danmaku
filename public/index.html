@@ -17,9 +17,10 @@
         margin: 0;
       }
       video {
+        width: 100vw;
         height: 500px;
       }
-      #ytd-player {
+      #movie_player {
         position: relative;
       }
       .cmt {
@@ -29,12 +30,12 @@
     </style>
   </head>
   <body>
-    <div id="player-container">
-      <div id="ytd-player">
+    <ytd-watch-flexy id="player-container">
+      <div id="movie_player">
         <video></video>
       </div>
       <div class="ytp-left-controls" align="center"></div>
-    </div>
+    </ytd-watch-flexy>
     <iframe src="iframe.html" frameborder="0" id="chatframe"></iframe>
     <script src="../dist/index.user.js"></script>
   </body>
