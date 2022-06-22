@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
       '& .ytp-menuitem-label': {
-        width: 60,
+        minWidth: 60,
       },
     },
     sliderRoot: {

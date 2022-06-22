@@ -77,6 +77,14 @@ const useFilterStyles = makeStyles((theme) =>
         marginLeft: theme.spacing(1),
       },
     },
+    tableContainer: {
+      flex: 1,
+      minHeight: 0,
+    },
+    table: {
+      height: '100%',
+      overflow: 'auto',
+    },
   })
 )
 
@@ -131,48 +139,52 @@ const FilterDanmaku = ({ switchPanel }) => {
             </button>
           </div>
 
-          <table>
-            <thead>
-              <tr>
-                <th className={classes.cell}>
-                  {t('filter.content')}({config.filterList.length})
-                </th>
-                <th className={classes.cell} align="right">
-                  {t('filter.operation')}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {config.filterList.map((o) => (
-                <tr key={o.id}>
-                  <td className={`${classes.contentCell} ${classes.cell}`}>
-                    {o.content}
-                  </td>
-                  <td className={classes.cell} align="right">
-                    <div className={classes.op}>
-                      <span
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => config.changeFilterUse(o.id)}
-                      >
-                        {o.isuse ? t('filter.on') : t('filter.off')}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: '1em',
-                          cursor: 'pointer',
-                        }}
-                        onClick={() => {
-                          config.deleteFilter(o.id)
-                        }}
-                      >
-                        <DeleteIcon />
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className={classes.tableContainer}>
+            <div className={classes.table}>
+              <table>
+                <thead>
+                  <tr>
+                    <th className={classes.cell}>
+                      {t('filter.content')}({config.filterList.length})
+                    </th>
+                    <th className={classes.cell} align="right">
+                      {t('filter.operation')}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {config.filterList.map((o) => (
+                    <tr key={o.id}>
+                      <td className={`${classes.contentCell} ${classes.cell}`}>
+                        {o.content}
+                      </td>
+                      <td className={classes.cell} align="right">
+                        <div className={classes.op}>
+                          <span
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => config.changeFilterUse(o.id)}
+                          >
+                            {o.isuse ? t('filter.on') : t('filter.off')}
+                          </span>
+                          <span
+                            style={{
+                              fontSize: '1em',
+                              cursor: 'pointer',
+                            }}
+                            onClick={() => {
+                              config.deleteFilter(o.id)
+                            }}
+                          >
+                            <DeleteIcon />
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </Fade>
     </div>

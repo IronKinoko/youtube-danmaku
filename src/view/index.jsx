@@ -8,6 +8,7 @@ import {
   ThemeProvider as MuiThemeProvider,
   Tooltip,
   useTheme,
+  Portal,
 } from '@material-ui/core'
 import { observer } from 'mobx-react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -74,9 +75,21 @@ const Danmaku = () => {
   const containerRef = useRef()
   const theme = useTheme()
   const [t] = useTranslation()
+  const btnRef = useRef()
+  const popoverRef = useRef()
 
   useEffect(() => {
     if (open) {
+      const rect = btnRef.current.getBoundingClientRect()
+
+      popoverRef.current.style.position = `absolute`
+      popoverRef.current.style.left = `${rect.x}px`
+      popoverRef.current.style.top = `${
+        rect.y + document.scrollingElement.scrollTop
+      }px`
+      popoverRef.current.style.width = `${rect.width}px`
+      popoverRef.current.style.height = `${rect.height}px`
+
       Array.from(containerRef.current.children).forEach(
         (o, i) => (o.hidden = i !== 0)
       )
@@ -137,6 +150,7 @@ const Danmaku = () => {
           classes={{ tooltip: classes.tooltip }}
         >
           <button
+            ref={btnRef}
             style={{ textAlign: 'center', width: 'auto' }}
             onClick={() => setOpen(true)}
             className="ytp-button"
@@ -145,18 +159,22 @@ const Danmaku = () => {
           </button>
         </Tooltip>
 
-        <Fade in={open} unmountOnExit>
-          <Box className={classes.controls}>
-            <ClickAwayListener onClickAway={() => setOpen(false)}>
-              <div className={classes.container}>
-                <div ref={containerRef}>
-                  <BaseConfig switchPanel={switchPanel} />
-                  <FilterDanmaku switchPanel={switchPanel} />
-                </div>
-              </div>
-            </ClickAwayListener>
-          </Box>
-        </Fade>
+        <Portal>
+          <Fade in={open} unmountOnExit>
+            <div ref={popoverRef}>
+              <Box className={classes.controls}>
+                <ClickAwayListener onClickAway={() => setOpen(false)}>
+                  <div className={classes.container}>
+                    <div ref={containerRef}>
+                      <BaseConfig switchPanel={switchPanel} />
+                      <FilterDanmaku switchPanel={switchPanel} />
+                    </div>
+                  </div>
+                </ClickAwayListener>
+              </Box>
+            </div>
+          </Fade>
+        </Portal>
       </span>
     </MuiThemeProvider>
   )
