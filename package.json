@@ -1,6 +1,6 @@
 {
   "name": "ytb-danmaku",
-  "version": "2.4.7",
+  "version": "2.5.0",
   "description": "ytb-danmaku",
   "main": "src/index.js",
   "scripts": {
@@ -28,11 +28,13 @@
     "@ironkinoko/danmaku": "^1.2.6",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
+    "i18next": "^21.8.10",
     "lodash.merge": "^4.6.2",
     "mobx": "^6.3.2",
     "mobx-react": "^7.2.0",
     "react": "^16.14.0",
-    "react-dom": "^16.14.0"
+    "react-dom": "^16.14.0",
+    "react-i18next": "^11.17.2"
   },
   "devDependencies": {
     "@babel/core": "^7.14.2",
@@ -43,6 +45,7 @@
     "@babel/preset-react": "^7.12.7",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-replace": "^2.4.2",
     "core-js": "^3.12.1",
