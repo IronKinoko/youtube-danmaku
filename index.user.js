@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         youtube-danmaku
 // @namespace    https://github.com/IronKinoko/ytb-danmaku
-// @version      2.5.0
+// @version      2.5.1
 // @icon         https://www.youtube.com/favicon.ico
 // @license      MIT
 // @description  Youtube livechat danmaku
@@ -15207,7 +15207,10 @@
     },
     table: {
       height: '100%',
-      overflow: 'auto'
+      overflow: 'auto',
+      '& table': {
+        width: '100%'
+      }
     }
   }));
 
@@ -15332,13 +15335,14 @@
       left: '50%',
       transform: 'translateX(-50%)',
       zIndex: theme.zIndex.tooltip,
-      width: 300
+      width: 300,
+      borderRadius: 12
     },
     tooltip: {
-      padding: theme.spacing(0.5, 1),
+      padding: '4px 10px',
       backgroundColor: 'rgba(28,28,28,0.9)',
       fontSize: 13,
-      borderRadius: 2,
+      borderRadius: 4,
       fontWeight: 400
     },
     container: {
