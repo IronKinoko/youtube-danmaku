@@ -84,6 +84,9 @@ const useFilterStyles = makeStyles((theme) =>
     table: {
       height: '100%',
       overflow: 'auto',
+      '& table': {
+        width: '100%',
+      },
     },
   })
 )
