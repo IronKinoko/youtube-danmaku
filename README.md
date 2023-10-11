@@ -15,7 +15,9 @@
 
 ## ChangeLog/更新日志
 
-v2.5.1 feat: detect youtube language
+v2.5.2 feat: detect youtube language
+
+v2.5.1 feat: support material design 3 style
 
 v2.5.0 feat: add english version
 
