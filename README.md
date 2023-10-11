@@ -15,6 +15,8 @@
 
 ## ChangeLog/更新日志
 
+v2.5.1 feat: detect youtube language
+
 v2.5.0 feat: add english version
 
 v2.4.4 feat: 增加**字体大小**控制，替换弹幕组件
