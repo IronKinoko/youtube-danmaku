@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         youtube-danmaku
 // @namespace    https://github.com/IronKinoko/ytb-danmaku
-// @version      2.5.1
+// @version      2.5.2
 // @icon         https://www.youtube.com/favicon.ico
 // @license      MIT
 // @description  Youtube livechat danmaku
@@ -18805,7 +18805,7 @@
         translation: zhCN
       }
     },
-    lng: /^zh/.test(navigator.language) ? 'zh-CN' : 'en',
+    lng: window.ytcfg ? /^zh-/.test(window.ytcfg.get('HL')) ? 'zh-CN' : 'en' : /^zh/.test(navigator.language) ? 'zh-CN' : 'en',
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
