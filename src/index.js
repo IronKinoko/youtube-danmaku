@@ -8,6 +8,12 @@ import { initReactI18next } from 'react-i18next'
 import en from './locales/en.json'
 import zhCN from './locales/zh-CN.json'
 
+if (typeof window.trustedTypes !== 'undefined') {
+  window.trustedTypes.createPolicy('default', {
+    createHTML: (string) => string,
+  })
+}
+
 i18n.use(initReactI18next).init({
   resources: {
     en: {
@@ -33,6 +39,7 @@ i18n.use(initReactI18next).init({
 window.addEventListener('load', () => {
   console.log('[ytb-danmaku] init')
   init(() => {
+    // eslint-disable-next-line react/no-deprecated
     ReactDOM.render(<Danmaku />, document.getElementById('ytb-danmaku-config'))
   })
 })
