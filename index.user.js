@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         youtube-danmaku
 // @namespace    https://github.com/IronKinoko/ytb-danmaku
-// @version      2.5.3
+// @version      2.6.0
 // @icon         https://www.youtube.com/favicon.ico
 // @license      MIT
 // @description  Youtube livechat danmaku
@@ -14,7 +14,7 @@
 // @require      https://unpkg.com/mobx@6.3.2/dist/mobx.umd.production.min.js
 // @require      https://unpkg.com/mobx-react-lite@3.2.0/dist/mobxreactlite.umd.production.min.js
 // @require      https://unpkg.com/mobx-react@7.2.0/dist/mobxreact.umd.production.min.js
-// @require      https://unpkg.com/@ironkinoko/danmaku@1.2.6/dist/danmaku.umd.js
+// @require      https://unpkg.com/@ironkinoko/danmaku@1.4.4/dist/danmaku.umd.js
 // ==/UserScript==
 (function (React$3, ReactDOM, mobxReact, mobx, Danmaku$2) {
   'use strict';
@@ -203,13 +203,18 @@
   var grey$1 = grey;
 
   function _extends$1() {
-    return _extends$1 = Object.assign ? Object.assign.bind() : function (n) {
-      for (var e = 1; e < arguments.length; e++) {
-        var t = arguments[e];
-        for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+    _extends$1 = Object.assign ? Object.assign.bind() : function (target) {
+      for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i];
+        for (var key in source) {
+          if (Object.prototype.hasOwnProperty.call(source, key)) {
+            target[key] = source[key];
+          }
+        }
       }
-      return n;
-    }, _extends$1.apply(null, arguments);
+      return target;
+    };
+    return _extends$1.apply(this, arguments);
   }
 
   function _typeof$2(o) {
@@ -401,13 +406,19 @@
     return "symbol" == _typeof$2(i) ? i : i + "";
   }
 
-  function _defineProperty$1(e, r, t) {
-    return (r = toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-      value: t,
-      enumerable: !0,
-      configurable: !0,
-      writable: !0
-    }) : e[r] = t, e;
+  function _defineProperty$1(obj, key, value) {
+    key = toPropertyKey(key);
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
   }
 
   /**
@@ -645,26 +656,33 @@
     return recomposeColor(color);
   }
 
-  function _objectWithoutPropertiesLoose(r, e) {
-    if (null == r) return {};
-    var t = {};
-    for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-      if (e.includes(n)) continue;
-      t[n] = r[n];
+  function _objectWithoutPropertiesLoose(source, excluded) {
+    if (source == null) return {};
+    var target = {};
+    var sourceKeys = Object.keys(source);
+    var key, i;
+    for (i = 0; i < sourceKeys.length; i++) {
+      key = sourceKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      target[key] = source[key];
     }
-    return t;
+    return target;
   }
 
-  function _objectWithoutProperties(e, t) {
-    if (null == e) return {};
-    var o,
-      r,
-      i = _objectWithoutPropertiesLoose(e, t);
+  function _objectWithoutProperties(source, excluded) {
+    if (source == null) return {};
+    var target = _objectWithoutPropertiesLoose(source, excluded);
+    var key, i;
     if (Object.getOwnPropertySymbols) {
-      var s = Object.getOwnPropertySymbols(e);
-      for (r = 0; r < s.length; r++) o = s[r], t.includes(o) || {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+      var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+      for (i = 0; i < sourceSymbolKeys.length; i++) {
+        key = sourceSymbolKeys[i];
+        if (excluded.indexOf(key) >= 0) continue;
+        if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+        target[key] = source[key];
+      }
     }
-    return i;
+    return target;
   }
 
   // Sorted ASC by size. That's important.
@@ -1032,34 +1050,35 @@
   };
   var shape$1 = shape;
 
-  function _arrayLikeToArray(r, a) {
-    (null == a || a > r.length) && (a = r.length);
-    for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
-    return n;
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+    return arr2;
   }
 
-  function _arrayWithoutHoles(r) {
-    if (Array.isArray(r)) return _arrayLikeToArray(r);
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
   }
 
-  function _iterableToArray(r) {
-    if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r);
+  function _iterableToArray(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
   }
 
-  function _unsupportedIterableToArray(r, a) {
-    if (r) {
-      if ("string" == typeof r) return _arrayLikeToArray(r, a);
-      var t = {}.toString.call(r).slice(8, -1);
-      return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0;
-    }
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
   }
 
   function _nonIterableSpread() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
-  function _toConsumableArray(r) {
-    return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread();
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
   }
 
   function merge(acc, item) {
@@ -1449,8 +1468,8 @@
   var sizing = compose(width, maxWidth, minWidth, height, maxHeight, minHeight, boxSizing);
   var sizing$1 = sizing;
 
-  function _arrayWithHoles(r) {
-    if (Array.isArray(r)) return r;
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
   }
 
   function _iterableToArrayLimit(r, l) {
@@ -1485,8 +1504,8 @@
     throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
-  function _slicedToArray(r, e) {
-    return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
   }
 
   function memoize$1(fn) {
@@ -1876,31 +1895,43 @@
   };
   var isBrowser$1 = (typeof window === "undefined" ? "undefined" : _typeof$1(window)) === "object" && (typeof document === "undefined" ? "undefined" : _typeof$1(document)) === 'object' && document.nodeType === 9;
 
-  function _defineProperties(e, r) {
-    for (var t = 0; t < r.length; t++) {
-      var o = r[t];
-      o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, toPropertyKey(o.key), o);
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, toPropertyKey(descriptor.key), descriptor);
     }
   }
-  function _createClass(e, r, t) {
-    return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-      writable: !1
-    }), e;
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    Object.defineProperty(Constructor, "prototype", {
+      writable: false
+    });
+    return Constructor;
   }
 
-  function _setPrototypeOf(t, e) {
-    return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-      return t.__proto__ = e, t;
-    }, _setPrototypeOf(t, e);
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
+      o.__proto__ = p;
+      return o;
+    };
+    return _setPrototypeOf(o, p);
   }
 
-  function _inheritsLoose(t, o) {
-    t.prototype = Object.create(o.prototype), t.prototype.constructor = t, _setPrototypeOf(t, o);
+  function _inheritsLoose(subClass, superClass) {
+    subClass.prototype = Object.create(superClass.prototype);
+    subClass.prototype.constructor = subClass;
+    _setPrototypeOf(subClass, superClass);
   }
 
-  function _assertThisInitialized(e) {
-    if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    return e;
+  function _assertThisInitialized(self) {
+    if (self === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self;
   }
 
   var plainObjectConstrurctor = {}.constructor;
@@ -2086,7 +2117,7 @@
         newValue = this.options.jss.plugins.onChangeValue(value, name, this);
       }
       var isEmpty = newValue == null || newValue === false;
-      var isDefined = name in this.style; // Value is empty and wasn't defined before.
+      var isDefined = (name in this.style); // Value is empty and wasn't defined before.
 
       if (isEmpty && !isDefined && !force) return this; // We are going to remove this value.
 
@@ -5190,8 +5221,10 @@
     return useStyles;
   }
 
-  function _classCallCheck(a, n) {
-    if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
   }
 
   function r(e) {
@@ -5634,7 +5667,7 @@
       }, props), path);
     };
     Component.muiName = SvgIcon$1.muiName;
-    return /*#__PURE__*/React__default["default"].memo(/*#__PURE__*/React__default["default"].forwardRef(Component));
+    return /*#__PURE__*/React__default["default"].memo( /*#__PURE__*/React__default["default"].forwardRef(Component));
   }
 
   // Corresponds to 10 frames at 60 Hz.
@@ -5925,8 +5958,8 @@
     useIsFocusVisible: useIsFocusVisible
   });
 
-  function _toArray(r) {
-    return _arrayWithHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableRest();
+  function _toArray(arr) {
+    return _arrayWithHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableRest();
   }
 
   var config$1 = {
@@ -6285,7 +6318,7 @@
         _this$props.onExited;
         _this$props.nodeRef;
         var childProps = _objectWithoutPropertiesLoose(_this$props, ["children", "in", "mountOnEnter", "unmountOnExit", "appear", "enter", "exit", "timeout", "addEndListener", "onEnter", "onEntering", "onEntered", "onExit", "onExiting", "onExited", "nodeRef"]);
-      return (/*#__PURE__*/
+      return /*#__PURE__*/(
         // allows for nested Transitions
         React__default["default"].createElement(TransitionGroupContext.Provider, {
           value: null
@@ -6414,8 +6447,8 @@
     Object.keys(children).forEach(function (key) {
       var child = children[key];
       if (! /*#__PURE__*/React$3.isValidElement(child)) return;
-      var hasPrev = key in prevChildMapping;
-      var hasNext = key in nextChildMapping;
+      var hasPrev = (key in prevChildMapping);
+      var hasNext = (key in nextChildMapping);
       var prevChild = prevChildMapping[key];
       var isLeaving = /*#__PURE__*/React$3.isValidElement(prevChild) && !prevChild.props.in; // item is new (entering)
 
@@ -6882,7 +6915,7 @@
   var TouchRipple$1 = withStyles(styles$f, {
     flip: false,
     name: 'MuiTouchRipple'
-  })(/*#__PURE__*/React__namespace.memo(TouchRipple));
+  })( /*#__PURE__*/React__namespace.memo(TouchRipple));
 
   var styles$e = {
     /* Styles applied to the root element. */
@@ -7812,7 +7845,7 @@
     var _React$useState = React__namespace.useState(null),
       mountNode = _React$useState[0],
       setMountNode = _React$useState[1];
-    var handleRef = useForkRef(/*#__PURE__*/ /*#__PURE__*/React__namespace.isValidElement(children) ? children.ref : null, ref);
+    var handleRef = useForkRef( /*#__PURE__*/ /*#__PURE__*/React__namespace.isValidElement(children) ? children.ref : null, ref);
     useEnhancedEffect$2(function () {
       if (!disablePortal) {
         setMountNode(getContainer(container) || document.body);
@@ -7833,7 +7866,7 @@
       }
     }, [onRendered, mountNode, disablePortal]);
     if (disablePortal) {
-      if (/*#__PURE__*/React__namespace.isValidElement(children)) {
+      if ( /*#__PURE__*/React__namespace.isValidElement(children)) {
         return /*#__PURE__*/React__namespace.cloneElement(children, {
           ref: handleRef
         });
@@ -11009,29 +11042,37 @@
   });
   var Popper$1 = Popper;
 
-  function _inherits(t, e) {
-    if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-    t.prototype = Object.create(e && e.prototype, {
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
       constructor: {
-        value: t,
-        writable: !0,
-        configurable: !0
+        value: subClass,
+        writable: true,
+        configurable: true
       }
-    }), Object.defineProperty(t, "prototype", {
-      writable: !1
-    }), e && _setPrototypeOf(t, e);
+    });
+    Object.defineProperty(subClass, "prototype", {
+      writable: false
+    });
+    if (superClass) _setPrototypeOf(subClass, superClass);
   }
 
-  function _possibleConstructorReturn(t, e) {
-    if (e && ("object" == _typeof$2(e) || "function" == typeof e)) return e;
-    if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
-    return _assertThisInitialized(t);
+  function _possibleConstructorReturn(self, call) {
+    if (call && (_typeof$2(call) === "object" || typeof call === "function")) {
+      return call;
+    } else if (call !== void 0) {
+      throw new TypeError("Derived constructors may only return object or undefined");
+    }
+    return _assertThisInitialized(self);
   }
 
-  function _getPrototypeOf(t) {
-    return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-      return t.__proto__ || Object.getPrototypeOf(t);
-    }, _getPrototypeOf(t);
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
+      return o.__proto__ || Object.getPrototypeOf(o);
+    };
+    return _getPrototypeOf(o);
   }
 
   var styles$3 = function styles(theme) {
@@ -12798,15 +12839,37 @@
     if (r != null) return unescape(decodeURI(r[2]));
     return null;
   }
+  function waitFor(validator, timeout) {
+    return new Promise((resolve, reject) => {
+      let timeId = null;
+      let intervalId = null;
+      intervalId = setInterval(() => {
+        if (validator()) {
+          clear();
+          resolve();
+        }
+      }, 16);
+      if (timeout) {
+        timeId = setTimeout(() => {
+          clear();
+          reject();
+        }, timeout);
+      }
+      const clear = () => {
+        if (timeId) clearTimeout(timeId);
+        if (intervalId) clearInterval(intervalId);
+      };
+    });
+  }
 
   var ArrowForwardIos = {};
 
   var interopRequireDefault = {exports: {}};
 
   (function (module) {
-  function _interopRequireDefault(e) {
-    return e && e.__esModule ? e : {
-      "default": e
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      "default": obj
     };
   }
   module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -12820,11 +12883,11 @@
   function _typeof(o) {
     "@babel/helpers - typeof";
 
-    return module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return (module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
       return typeof o;
     } : function (o) {
       return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-    }, module.exports.__esModule = true, module.exports["default"] = module.exports, _typeof(o);
+    }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(o);
   }
   module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
   }(_typeof));
@@ -12885,19 +12948,11 @@
   var default_1$2 = ArrowForwardIos.default = void 0;
   var React$2 = _interopRequireWildcard$2(React__default["default"]);
   var _createSvgIcon$2 = _interopRequireDefault$2(createSvgIcon);
-  var _default$2 = (0, _createSvgIcon$2.default)(/*#__PURE__*/React$2.createElement("path", {
+  var _default$2 = (0, _createSvgIcon$2.default)( /*#__PURE__*/React$2.createElement("path", {
     d: "M5.88 4.12L13.76 12l-7.88 7.88L8 22l10-10L8 2z"
   }), 'ArrowForwardIos');
   default_1$2 = ArrowForwardIos.default = _default$2;
 
-  function _defineProperty(e, r, t) {
-    return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-      value: t,
-      enumerable: !0,
-      configurable: !0,
-      writable: !0
-    }) : e[r] = t, e;
-  }
   function _toPrimitive(t, r) {
     if ("object" != typeof t || !t) return t;
     var e = t[Symbol.toPrimitive];
@@ -12911,6 +12966,20 @@
   function _toPropertyKey(t) {
     var i = _toPrimitive(t, "string");
     return "symbol" == typeof i ? i : i + "";
+  }
+  function _defineProperty(obj, key, value) {
+    key = _toPropertyKey(key);
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
   }
 
   let sendDanmakuLock = false;
@@ -13056,12 +13125,12 @@
       subtree: true
     });
   }
-  function inject(cb) {
+  async function inject(cb) {
     try {
       var _core;
       console.trace('ytb-danmaku-inited');
+      await waitFor(() => !!document.querySelector('ytd-watch-flexy .ytp-left-controls'));
       const player = document.getElementById('movie_player');
-      if (!player) throw new Error('not find player');
       document.querySelector('ytd-watch-flexy .ytp-left-controls').setAttribute('style', 'overflow: unset;');
       (_core = core) === null || _core === void 0 || _core.destroy();
       core = new Danmaku__default["default"]({
@@ -13074,53 +13143,90 @@
       buildControls();
       subEvent();
       config.toggleDanmaku(config.use);
+      await tryOpenDanmakuList();
       cb && cb();
     } catch (e) {
       console.error(e);
-      setTimeout(() => {
-        inject(cb);
-      }, 3000);
+    }
+  }
+  async function tryOpenDanmakuList() {
+    await waitFor(() => !!document.querySelector('ytd-live-chat-frame'), 60000);
+    const root = document.querySelector('ytd-live-chat-frame');
+    const btnWrap = root.querySelector('#show-hide-button');
+    if (!btnWrap.hidden) {
+      const btn = btnWrap.querySelector('ytd-button-renderer');
+      btn.click();
     }
   }
   function getDanmaku() {
+    /** @type {HTMLIFrameElement} */
     const iframe = document.querySelector('iframe#chatframe');
-    if (iframe) {
-      /**
-       * @type {Document}
-       */
-      const idoc = iframe.contentDocument;
-      const messagesNode = Array.from(idoc.querySelectorAll(config.showSuperChat ? 'yt-live-chat-paid-message-renderer,yt-live-chat-text-message-renderer' : 'yt-live-chat-text-message-renderer'));
-      const lastMessageNodes = messagesNode.slice(-10);
-      lastMessageNodes.forEach(lastMessageNode => {
-        const nextID = lastMessageNode.id;
-        if (!playing || prevID.includes(nextID)) return;
-        prevID = [...prevID, nextID].slice(-20);
-        if (config.filterUse) {
-          const filterList = config.filterList.filter(o => o.isuse);
-          const messageText = lastMessageNode.querySelector('#message').innerText || '';
-          if (filterList.some(o => messageText.includes(o.content))) return;
+    if (!iframe) return;
+
+    /**
+     * @type {Document}
+     */
+    const idoc = iframe.contentDocument;
+    const messagesNode = Array.from(idoc.querySelectorAll(config.showSuperChat ? 'yt-live-chat-paid-message-renderer,yt-live-chat-text-message-renderer' : 'yt-live-chat-text-message-renderer'));
+    const maxCount = 30;
+    const lastMessageNodes = messagesNode.slice(-maxCount);
+    lastMessageNodes.forEach(lastMessageNode => {
+      const nextID = lastMessageNode.id;
+      if (!playing || prevID.includes(nextID)) return;
+      prevID = [...prevID, nextID].slice(-maxCount * 2);
+      if (config.filterUse) {
+        const filterList = config.filterList.filter(o => o.isuse);
+        const messageText = lastMessageNode.querySelector('#message').innerText || '';
+        if (filterList.some(o => messageText.includes(o.content))) return;
+      }
+      let message = config.showStickers ? lastMessageNode.querySelector('#message').innerHTML : lastMessageNode.querySelector('#message').innerText;
+      const isPaidMessage = lastMessageNode.tagName.toLowerCase() === 'yt-live-chat-paid-message-renderer';
+      let color = isPaidMessage ? getComputedStyle(lastMessageNode).getPropertyValue('--yt-live-chat-paid-message-primary-color') : 'white';
+      const authorType = lastMessageNode.getAttribute('author-type');
+      let richTextRender = config.showStickers;
+      if (authorType === 'owner' || authorType === 'moderator') {
+        richTextRender = true;
+        const authorNode = lastMessageNode.querySelector('#author-name');
+        const authorName = authorNode.textContent;
+        let color, bgColor, icon;
+        const style = getComputedStyle(authorNode);
+        if (authorType === 'owner') {
+          color = style.color;
+          bgColor = style.backgroundColor;
+          icon = '';
+        } else {
+          color = 'white';
+          bgColor = style.color;
+          icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" style="display:inline-block;vertical-align:-0.125em;">
+          <path d="M9.64589146,7.05569719 C9.83346524,6.562372 9.93617022,6.02722257 9.93617022,5.46808511 C9.93617022,3.00042984 7.93574038,1 5.46808511,1 C4.90894765,1 4.37379823,1.10270499 3.88047304,1.29027875 L6.95744681,4.36725249 L4.36725255,6.95744681 L1.29027875,3.88047305 C1.10270498,4.37379824 1,4.90894766 1,5.46808511 C1,7.93574038 3.00042984,9.93617022 5.46808511,9.93617022 C6.02722256,9.93617022 6.56237198,9.83346524 7.05569716,9.64589147 L12.4098057,15 L15,12.4098057 L9.64589146,7.05569719 Z"></path>
+        </svg>`;
         }
-        const message = config.showStickers ? lastMessageNode.querySelector('#message').innerHTML : lastMessageNode.querySelector('#message').innerText;
-        const isPaidMessage = lastMessageNode.tagName.toLowerCase() === 'yt-live-chat-paid-message-renderer';
-        const color = isPaidMessage ? getComputedStyle(lastMessageNode).getPropertyValue('--yt-live-chat-paid-message-primary-color') : 'white';
-        core.emit({
-          mode: 'rtl',
-          style: {
-            color
-          },
-          ...(config.showStickers ? {
-            render: () => {
-              const div = document.createElement('div');
-              div.innerHTML = message;
-              div.style.color = color;
-              return div;
-            }
-          } : {
-            text: message
-          })
-        });
+        message = `<span style="
+        display:inline-block;
+        color:${color};
+        background-color:${bgColor};
+        padding: 2px 4px;
+        border-radius: 4px;
+        margin-right: 4px;
+        ">${authorName}${icon}</span>${message}`;
+      }
+      core.emit({
+        mode: 'rtl',
+        style: {
+          color
+        },
+        ...(richTextRender ? {
+          render: () => {
+            const div = document.createElement('div');
+            div.innerHTML = message;
+            div.style.color = color;
+            return div;
+          }
+        } : {
+          text: message
+        })
       });
-    }
+    });
   }
   function rAFDanmaku() {
     if (playing) requestAnimationFrame(rAFDanmaku);
@@ -13147,6 +13253,7 @@
       if (!config.use) return;
       playing = true;
       core.show();
+      prevID = [];
       rAFDanmaku();
     });
     window.addEventListener('resize', () => {
@@ -13322,7 +13429,7 @@
   var default_1$1 = ArrowBackIos.default = void 0;
   var React$1 = _interopRequireWildcard$1(React__default["default"]);
   var _createSvgIcon$1 = _interopRequireDefault$1(createSvgIcon);
-  var _default$1 = (0, _createSvgIcon$1.default)(/*#__PURE__*/React$1.createElement("path", {
+  var _default$1 = (0, _createSvgIcon$1.default)( /*#__PURE__*/React$1.createElement("path", {
     d: "M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
   }), 'ArrowBackIos');
   default_1$1 = ArrowBackIos.default = _default$1;
@@ -13337,7 +13444,7 @@
   var default_1 = Delete.default = void 0;
   var React = _interopRequireWildcard(React__default["default"]);
   var _createSvgIcon = _interopRequireDefault(createSvgIcon);
-  var _default = (0, _createSvgIcon.default)(/*#__PURE__*/React.createElement("path", {
+  var _default = (0, _createSvgIcon.default)( /*#__PURE__*/React.createElement("path", {
     d: "M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
   }), 'Delete');
   default_1 = Delete.default = _default;
@@ -16424,7 +16531,7 @@
     console.log('[ytb-danmaku] init');
     init(() => {
       // eslint-disable-next-line react/no-deprecated
-      ReactDOM__default["default"].render(/*#__PURE__*/React__default["default"].createElement(Danmaku$1, null), document.getElementById('ytb-danmaku-config'));
+      ReactDOM__default["default"].render( /*#__PURE__*/React__default["default"].createElement(Danmaku$1, null), document.getElementById('ytb-danmaku-config'));
     });
   });
 
