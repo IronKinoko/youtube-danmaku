@@ -15,6 +15,8 @@
 
 ## ChangeLog/更新日志
 
+v2.6.0 feat: 支持渲染管理员与主播弹幕高亮
+
 v2.5.2 feat: detect youtube language
 
 v2.5.1 feat: support material design 3 style

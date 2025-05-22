@@ -1,6 +1,6 @@
 import { autorun, makeAutoObservable } from 'mobx'
 import Danmaku from '@ironkinoko/danmaku'
-import { getQueryString } from './utils'
+import { getQueryString, waitFor } from './utils'
 
 let sendDanmakuLock = false
 let playing = false
@@ -182,12 +182,15 @@ function devModeInit(cb) {
   return inject(cb)
 }
 
-function inject(cb) {
+async function inject(cb) {
   try {
     console.trace('ytb-danmaku-inited')
 
+    await waitFor(
+      () => !!document.querySelector('ytd-watch-flexy .ytp-left-controls')
+    )
     const player = document.getElementById('movie_player')
-    if (!player) throw new Error('not find player')
+
     document
       .querySelector('ytd-watch-flexy .ytp-left-controls')
       .setAttribute('style', 'overflow: unset;')
@@ -203,72 +206,118 @@ function inject(cb) {
     buildControls()
     subEvent()
     config.toggleDanmaku(config.use)
+    await tryOpenDanmakuList()
+
     cb && cb()
   } catch (e) {
     console.error(e)
-    setTimeout(() => {
-      inject(cb)
-    }, 3000)
+  }
+}
+
+async function tryOpenDanmakuList() {
+  await waitFor(() => !!document.querySelector('ytd-live-chat-frame'), 60000)
+  const root = document.querySelector('ytd-live-chat-frame')
+  const btnWrap = root.querySelector('#show-hide-button')
+  if (!btnWrap.hidden) {
+    const btn = btnWrap.querySelector('ytd-button-renderer')
+    btn.click()
   }
 }
 
 function getDanmaku() {
+  /** @type {HTMLIFrameElement} */
   const iframe = document.querySelector('iframe#chatframe')
-  if (iframe) {
-    /**
-     * @type {Document}
-     */
-    const idoc = iframe.contentDocument
-    const messagesNode = Array.from(
-      idoc.querySelectorAll(
-        config.showSuperChat
-          ? 'yt-live-chat-paid-message-renderer,yt-live-chat-text-message-renderer'
-          : 'yt-live-chat-text-message-renderer'
-      )
+  if (!iframe) return
+
+  /**
+   * @type {Document}
+   */
+  const idoc = iframe.contentDocument
+  const messagesNode = Array.from(
+    idoc.querySelectorAll(
+      config.showSuperChat
+        ? 'yt-live-chat-paid-message-renderer,yt-live-chat-text-message-renderer'
+        : 'yt-live-chat-text-message-renderer'
     )
-    const lastMessageNodes = messagesNode.slice(-10)
-    lastMessageNodes.forEach((lastMessageNode) => {
-      const nextID = lastMessageNode.id
+  )
+  const maxCount = 30
+  const lastMessageNodes = messagesNode.slice(-maxCount)
+  lastMessageNodes.forEach((lastMessageNode) => {
+    const nextID = lastMessageNode.id
 
-      if (!playing || prevID.includes(nextID)) return
-      prevID = [...prevID, nextID].slice(-20)
+    if (!playing || prevID.includes(nextID)) return
+    prevID = [...prevID, nextID].slice(-maxCount * 2)
 
-      if (config.filterUse) {
-        const filterList = config.filterList.filter((o) => o.isuse)
-        const messageText =
-          lastMessageNode.querySelector('#message').innerText || ''
-        if (filterList.some((o) => messageText.includes(o.content))) return
+    if (config.filterUse) {
+      const filterList = config.filterList.filter((o) => o.isuse)
+      const messageText =
+        lastMessageNode.querySelector('#message').innerText || ''
+      if (filterList.some((o) => messageText.includes(o.content))) return
+    }
+
+    let message = config.showStickers
+      ? lastMessageNode.querySelector('#message').innerHTML
+      : lastMessageNode.querySelector('#message').innerText
+
+    const isPaidMessage =
+      lastMessageNode.tagName.toLowerCase() ===
+      'yt-live-chat-paid-message-renderer'
+
+    let color = isPaidMessage
+      ? getComputedStyle(lastMessageNode).getPropertyValue(
+          '--yt-live-chat-paid-message-primary-color'
+        )
+      : 'white'
+
+    const authorType = lastMessageNode.getAttribute('author-type')
+
+    let richTextRender = config.showStickers
+
+    if (authorType === 'owner' || authorType === 'moderator') {
+      richTextRender = true
+
+      const authorNode = lastMessageNode.querySelector('#author-name')
+      const authorName = authorNode.textContent
+      let color, bgColor, icon
+      const style = getComputedStyle(authorNode)
+
+      if (authorType === 'owner') {
+        color = style.color
+        bgColor = style.backgroundColor
+        icon = ''
+      } else {
+        color = 'white'
+        bgColor = style.color
+        icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" style="display:inline-block;vertical-align:-0.125em;">
+          <path d="M9.64589146,7.05569719 C9.83346524,6.562372 9.93617022,6.02722257 9.93617022,5.46808511 C9.93617022,3.00042984 7.93574038,1 5.46808511,1 C4.90894765,1 4.37379823,1.10270499 3.88047304,1.29027875 L6.95744681,4.36725249 L4.36725255,6.95744681 L1.29027875,3.88047305 C1.10270498,4.37379824 1,4.90894766 1,5.46808511 C1,7.93574038 3.00042984,9.93617022 5.46808511,9.93617022 C6.02722256,9.93617022 6.56237198,9.83346524 7.05569716,9.64589147 L12.4098057,15 L15,12.4098057 L9.64589146,7.05569719 Z"></path>
+        </svg>`
       }
 
-      const message = config.showStickers
-        ? lastMessageNode.querySelector('#message').innerHTML
-        : lastMessageNode.querySelector('#message').innerText
+      message = `<span style="
+        display:inline-block;
+        color:${color};
+        background-color:${bgColor};
+        padding: 2px 4px;
+        border-radius: 4px;
+        margin-right: 4px;
+        ">${authorName}${icon}</span>${message}`
+    }
 
-      const isPaidMessage =
-        lastMessageNode.tagName.toLowerCase() ===
-        'yt-live-chat-paid-message-renderer'
-
-      const color = isPaidMessage
-        ? getComputedStyle(lastMessageNode).getPropertyValue(
-            '--yt-live-chat-paid-message-primary-color'
-          )
-        : 'white'
-      core.emit({
-        mode: 'rtl',
-        style: { color },
-        ...(config.showStickers
-          ? {
-              render: () => {
-                const div = document.createElement('div')
-                div.innerHTML = message
-                div.style.color = color
-                return div
-              },
-            }
-          : { text: message }),
-      })
+    core.emit({
+      mode: 'rtl',
+      style: { color },
+      ...(richTextRender
+        ? {
+            render: () => {
+              const div = document.createElement('div')
+              div.innerHTML = message
+              div.style.color = color
+              return div
+            },
+          }
+        : { text: message }),
     })
-  }
+  })
 }
 
 function rAFDanmaku() {
@@ -298,6 +347,7 @@ function subEvent() {
     if (!config.use) return
     playing = true
     core.show()
+    prevID = []
     rAFDanmaku()
   })
 

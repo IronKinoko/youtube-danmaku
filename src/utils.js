@@ -23,3 +23,29 @@ export function getQueryString(name) {
   if (r != null) return unescape(decodeURI(r[2]))
   return null
 }
+
+export function waitFor(validator, timeout) {
+  return new Promise((resolve, reject) => {
+    let timeId = null
+    let intervalId = null
+
+    intervalId = setInterval(() => {
+      if (validator()) {
+        clear()
+        resolve()
+      }
+    }, 16)
+
+    if (timeout) {
+      timeId = setTimeout(() => {
+        clear()
+        reject()
+      }, timeout)
+    }
+
+    const clear = () => {
+      if (timeId) clearTimeout(timeId)
+      if (intervalId) clearInterval(intervalId)
+    }
+  })
+}

@@ -15,6 +15,6 @@ export function genUserScriptInfo(pkg) {
 // @require      https://unpkg.com/mobx@6.3.2/dist/mobx.umd.production.min.js
 // @require      https://unpkg.com/mobx-react-lite@3.2.0/dist/mobxreactlite.umd.production.min.js
 // @require      https://unpkg.com/mobx-react@7.2.0/dist/mobxreact.umd.production.min.js
-// @require      https://unpkg.com/@ironkinoko/danmaku@1.2.6/dist/danmaku.umd.js
+// @require      https://unpkg.com/@ironkinoko/danmaku@1.4.4/dist/danmaku.umd.js
 // ==/UserScript==`
 }
