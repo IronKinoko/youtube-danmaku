@@ -22,18 +22,15 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'pnpm'
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 8
-      - name: pnpm install
-        run: pnpm install
-
-      - name: build
-        run: pnpm build
+      - run: pnpm install
+      - run: pnpm build
 
       - name: Deploy to gh-pages branch
         uses: JamesIves/github-pages-deploy-action@4.1.1
