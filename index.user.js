@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         youtube-danmaku
 // @namespace    https://github.com/IronKinoko/ytb-danmaku
-// @version      2.6.0
+// @version      2.6.1
 // @icon         https://www.youtube.com/favicon.ico
 // @license      MIT
 // @description  Youtube livechat danmaku
@@ -16507,9 +16507,12 @@
   	filter: filter
   };
 
-  if (typeof window.trustedTypes !== 'undefined') {
+  if (typeof window.trustedTypes !== 'undefined' && window.trustedTypes.defaultPolicy === null) {
+    const fn = str => str;
     window.trustedTypes.createPolicy('default', {
-      createHTML: string => string
+      createHTML: fn,
+      createScriptURL: fn,
+      createScript: fn
     });
   }
   instance.use(initReactI18next).init({
