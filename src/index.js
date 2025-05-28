@@ -8,9 +8,15 @@ import { initReactI18next } from 'react-i18next'
 import en from './locales/en.json'
 import zhCN from './locales/zh-CN.json'
 
-if (typeof window.trustedTypes !== 'undefined') {
+if (
+  typeof window.trustedTypes !== 'undefined' &&
+  window.trustedTypes.defaultPolicy === null
+) {
+  const fn = (str) => str
   window.trustedTypes.createPolicy('default', {
-    createHTML: (string) => string,
+    createHTML: fn,
+    createScriptURL: fn,
+    createScript: fn,
   })
 }
 
