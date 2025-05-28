@@ -15,6 +15,8 @@
 
 ## ChangeLog/更新日志
 
+v2.6.1 fix: 修复脚本与其他软件的兼容性问题
+
 v2.6.0 feat: 支持渲染管理员与主播弹幕高亮
 
 v2.5.2 feat: detect youtube language
